@@ -1,0 +1,747 @@
+single inheritence:
+If a single class is derived from one base class then it is called single inheritance. 
+In C++ single inheritance base and derived class exhibit one to one relation.
+#include<iostream>
+using namespace std;
+class Account
+{
+    public:
+    float salary = 50000;
+};
+class programmer: public Account{
+    public:
+    float bonus=10000;
+};
+int main(void)
+{
+    programmer p1;
+    cout<<"salary:"<<p1.salary<<endl;
+    cout<<"Bonus:"<<p1.bonus<<endl;
+    return 0;
+}
+Multilevel inheritence:
+Multilevel Inheritance in C++ is the process of deriving a class from another derived class. 
+When one class inherits another class it is further inherited by another class. It is known as multi-level inheritance.
+#include<iostream>
+using namespace std;
+class Animal
+{
+public:
+void eat()
+{
+    cout<<"Eating:"<<endl;
+}
+};
+class Dog:public Animal
+{
+    public:
+    void bark()
+    {
+        cout<<"Barking:"<<endl;
+    }
+};
+class BabyDog:public Dog{
+    public:
+    void weep()
+    {
+        cout<<"weeping:";
+    }
+};
+int main(void)
+{
+    BabyDog d1;
+    d1.eat();
+    d1.bark();
+    d1.weep();
+    return 0;
+}
+
+
+
+Multiple inheritence:
+Multiple Inheritance is a feature of C++ where a class can inherit from more than one classes.  
+The constructors of inherited classes are called in the same order in which they are inherited.
+#include <iostream>
+using namespace std;
+class A
+{
+protected:
+int a;
+public:
+void get_a(int n)
+{
+a = n;
+}
+};
+class B
+
+{
+
+protected:
+
+int b;
+
+public:
+
+void get_b(int n)
+
+{
+
+b = n;
+
+}
+};
+class C: public A,public B
+
+
+{
+
+public:
+
+void display()
+
+{
+
+std::cout << "The value of a is: " <<a<< std::endl;
+
+std::cout << "The value of bis: " <<b<< std::endl;
+
+cout<<"Addition of a and b is: "<<a+b;
+
+}
+
+};
+int main()
+
+{
+   C c; 
+
+
+c.get_a(10);
+
+c.get_b(20);
+
+c.display();
+
+return 0;
+
+}
+Hybrid inheritence:
+Inheritance is defined as the process in which one class inherits the property of another class. 
+The class whose property is inherited is called as Base class or the parent of that class. 
+The class that inherits the base class's properties (parent class) is the derived class.
+#include<iostream>
+using namespace std;
+class A
+{
+    protected:
+    int a;
+    public:
+    void get_a()
+    {
+        std::cout<<"Enter the value of a :"<<std::endl;
+        cin>>a;
+    }
+};
+class B:public A
+{
+  protected:
+    int b;
+    public:
+    void get_b()
+    {
+        std::cout<<"Enter the value of b:"<<std::endl;
+        cin>>b;
+    }
+};
+class C
+{
+    protected: 
+    int c;
+    public:
+    void get_c()
+    {
+        std::cout<<"Enter the value of c is:"<<std::endl;
+        cin>>c;
+    }
+};
+class D:public B, public C
+{
+    protected:
+    int d;
+    public:
+    void mul()
+    {
+        get_a();
+        get_b();
+        get_c();
+        std::cout<<"Multiplication of a,b,c is:"<<a*b*c<<std::endl;
+    }
+};
+    
+int main()
+{
+    D d;
+    d.mul();
+    return 0;
+}
+All examples:
+#include <iostream>
+#include <vector>
+#include <string>
+
+class Person {
+protected:
+    std::string name;
+    int age;
+public:
+    Person(const std::string& name, int age) : name(name), age(age) {}
+    virtual void getDetails() const {
+        std::cout << "Name: " << name << "\nAge: " << age << std::endl;
+    }
+};
+
+class Student : virtual public Person {
+protected:
+    int studentId;
+    std::string major;
+public:
+    Student(const std::string& name, int age, int studentId, const std::string& major)
+        : Person(name, age), studentId(studentId), major(major) {}
+
+    void setMajor(const std::string& major) {
+        this->major = major;
+    }
+
+    std::string getMajor() const {
+        return major;
+    }
+
+    void getDetails() const override {
+        Person::getDetails();
+        std::cout << "Student ID: " << studentId << "\nMajor: " << major << std::endl;
+    }
+};
+
+class Faculty : virtual public Person {
+protected:
+    std::string department;
+    int employeeId;
+public:
+    Faculty(const std::string& name, int age, int employeeId, const std::string& department)
+        : Person(name, age), employeeId(employeeId), department(department) {}
+
+    void setDepartment(const std::string& department) {
+        this->department = department;
+    }
+
+    std::string getDepartment() const {
+        return department;
+    }
+
+    void getDetails() const override {
+        Person::getDetails();
+        std::cout << "Employee ID: " << employeeId << "\nDepartment: " << department << std::endl;
+    }
+};
+
+class TeachingAssistant : virtual public Student {
+protected:
+    std::vector<std::string> coursesTeaching;
+public:
+    TeachingAssistant(const std::string& name, int age, int studentId, const std::string& major)
+        : Person(name, age), Student(name, age, studentId, major) {}
+
+    void setCoursesTeaching(const std::vector<std::string>& courses) {
+        this->coursesTeaching = courses;
+    }
+
+    std::vector<std::string> getCoursesTeaching() const {
+        return coursesTeaching;
+    }
+
+    void getDetails() const override {
+        Student::getDetails();
+        std::cout << "Courses Teaching: ";
+        for (const auto& course : coursesTeaching) {
+            std::cout << course << " ";
+        }
+        std::cout << std::endl;
+    }
+};
+
+class ResearchAssistant : virtual public Person {
+protected:
+    std::string researchArea;
+    std::string supervisor;
+public:
+    ResearchAssistant(const std::string& name, int age, const std::string& researchArea, const std::string& supervisor)
+        : Person(name, age), researchArea(researchArea), supervisor(supervisor) {}
+
+    void setResearchArea(const std::string& researchArea) {
+        this->researchArea = researchArea;
+    }
+
+    std::string getResearchArea() const {
+        return researchArea;
+    }
+
+    void setSupervisor(const std::string& supervisor) {
+        this->supervisor = supervisor;
+    }
+
+    std::string getSupervisor() const {
+        return supervisor;
+    }
+
+    void getDetails() const override {
+        Person::getDetails();
+        std::cout << "Research Area: " << researchArea << "\nSupervisor: " << supervisor << std::endl;
+    }
+};
+
+class GraduateStudentTA : public TeachingAssistant {
+public:
+    GraduateStudentTA(const std::string& name, int age, int studentId, const std::string& major)
+        : Person(name, age), Student(name, age, studentId, major), TeachingAssistant(name, age, studentId, major) {}
+
+    void getDetails() const override {
+        Student::getDetails();
+        std::cout << "Courses Teaching: ";
+        for (const auto& course : coursesTeaching) {
+            std::cout << course << " ";
+        }
+        std::cout << std::endl;
+    }
+};
+
+int main() {
+    Student student("John Doe", 20, 12345, "Computer Science");
+    student.getDetails();
+
+    Faculty faculty("Dr. Smith", 45, 67890, "Mathematics");
+    faculty.getDetails();
+
+    TeachingAssistant ta("Jane Roe", 23, 54321, "Physics");
+    ta.setCoursesTeaching({"Physics 101", "Astronomy 202"});
+    ta.getDetails();
+
+    ResearchAssistant ra("Alice Johnson", 28, "Quantum Computing", "Dr. Einstein");
+    ra.getDetails();
+
+    GraduateStudentTA gta("Bob Brown", 26, 11223, "Biology");
+    gta.setCoursesTeaching({"Bio 101", "Genetics 201"});
+    gta.getDetails();
+
+    return 0;
+}
+
+#include <iostream>
+#include <vector>
+#include <string>
+
+class Person {
+protected:
+    std::string name;
+    int age;
+public:
+    Person(const std::string& name, int age) : name(name), age(age) {}
+    virtual void getDetails() const {
+        std::cout << "Name: " << name << "\nAge: " << age << std::endl;
+    }
+};
+
+class Student : virtual public Person {
+protected:
+    int studentId;
+    std::string major;
+public:
+    Student(const std::string& name, int age, int studentId, const std::string& major)
+        : Person(name, age), studentId(studentId), major(major) {}
+
+    void setMajor(const std::string& major) {
+        this->major = major;
+    }
+
+    std::string getMajor() const {
+        return major;
+    }
+
+    void getDetails() const override {
+        Person::getDetails();
+std::cout << "Student ID: " << studentId << "\nMajor: " << major << std::endl;
+    }
+};
+class Faculty : virtual public Person {
+protected:
+    std::string department;
+    int employeeId;
+public:
+    Faculty(const std::string& name, int age, int employeeId, const std::string& department)
+        : Person(name, age), employeeId(employeeId), department(department) {}
+
+    void setDepartment(const std::string& department) {
+        this->department = department;
+    }
+
+    std::string getDepartment() const {
+        return department;
+    }
+
+    void getDetails() const override {
+        Person::getDetails();
+        std::cout << "Employee ID: " << employeeId << "\nDepartment: " << department << std::endl;
+    }
+};
+class TeachingAssistant : virtual public Student {
+protected:
+    std::vector<std::string> coursesTeaching;
+public:
+    TeachingAssistant(const std::string& name, int age, int studentId, const std::string& major)
+        : Person(name, age), Student(name, age, studentId, major) {}
+
+    void setCoursesTeaching(const std::vector<std::string>& courses) {
+        this->coursesTeaching = courses;
+    }
+
+    std::vector<std::string> getCoursesTeaching() const {
+        return coursesTeaching;
+    }
+
+    void getDetails() const override {
+        Student::getDetails();
+        std::cout << "Courses Teaching: ";
+        for (const auto& course : coursesTeaching) {
+            std::cout << course << " ";
+        }
+        std::cout << std::endl;
+    }
+};
+
+class ResearchAssistant : virtual public Person {
+protected:
+    std::string researchArea;
+    std::string supervisor;
+public:
+    ResearchAssistant(const std::string& name, int age, const std::string& researchArea, const std::string& supervisor)
+        : Person(name, age), researchArea(researchArea), supervisor(supervisor) {}
+
+    void setResearchArea(const std::string& researchArea) {
+        this->researchArea = researchArea;
+    }
+
+    std::string getResearchArea() const {
+        return researchArea;
+    }
+
+    void setSupervisor(const std::string& supervisor) {
+        this->supervisor = supervisor;
+    }
+
+    std::string getSupervisor() const {
+        return supervisor;
+    }
+
+    void getDetails() const override {
+        Person::getDetails();
+        std::cout << "Research Area: " << researchArea << "\nSupervisor: " << supervisor << std::endl;
+    }
+};
+
+class GraduateStudentTA : public TeachingAssistant {
+public:
+    GraduateStudentTA(const std::string& name, int age, int studentId, const std::string& major)
+        : Person(name, age), Student(name, age, studentId, major), TeachingAssistant(name, age, studentId, major) {}
+
+    void getDetails() const override {
+        Student::getDetails();
+        std::cout << "Courses Teaching: ";
+        for (const auto& course : coursesTeaching) {
+            std::cout << course << " ";
+        }
+        std::cout << std::endl;
+    }
+};
+
+int main() {
+    Student student("Akshith", 60, 161321, "Computer Science");
+    student.getDetails();
+
+    Faculty faculty("Dr. Jyothika", 55, 161421, "Mathematics");
+    faculty.getDetails();
+
+    TeachingAssistant ta("Sreemanth", 33, 54321, "Physics");
+    ta.setCoursesTeaching({"Physics 101", "Astronomy 202"});
+    ta.getDetails();
+
+    ResearchAssistant ra("Vinay", 54, "java", "Dr. ashwin");
+    ra.getDetails();
+
+    GraduateStudentTA gta("sanjay", 43, 11223, "Biology");
+    gta.setCoursesTeaching({"Bio 101", "Genetics 201"});
+    gta.getDetails();
+
+return 0;
+}
+
+*Example*
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Person {
+private:
+    string name;
+    int age;
+
+public:
+    // Constructor with validation (optional)
+    Person(const string& n, int a) {
+        if (a < 0) {
+            throw invalid_argument("Age cannot be negative.");
+        }
+        name = n;
+        age = a;
+    }
+
+    virtual ~Person() {} // Virtual destructor for proper cleanup
+
+    // Accessors (getters)
+    string getName() const { return name; }
+    int getAge() const { return age; }
+
+    // Mutators (setters) with validation (optional)
+    void setName(const string& n) {
+        if (n.empty()) {
+            throw invalid_argument("Name cannot be empty.");
+        }
+        name = n;
+    }
+
+    void setAge(int a) {
+        if (a < 0) {
+            throw invalid_argument("Age cannot be negative.");
+        }
+        age = a;
+    }
+
+    // Virtual function for details (can be overridden)
+    virtual void getDetails() const {
+        cout << "Name: " << name << endl;
+        cout << "Age: " << age << endl;
+    }
+};
+
+class Student : public Person {
+private:
+    int studentId;
+    string major;
+
+public:
+    Student(const string& n, int a, int id, const string& m) : Person(n, a), studentId(id), major(m) {}
+
+    // Accessors
+    int getStudentId() const { return studentId; }
+    string getMajor() const { return major; }
+
+    // Mutators
+    void setMajor(const string& m) {
+        if (m.empty()) {
+            throw invalid_argument("Major cannot be empty.");
+        }
+        major = m;
+    }
+
+    // Override getDetails to include student-specific information
+    void getDetails() const override {
+        Person::getDetails(); // Call base class getDetails
+        cout << "Student ID: " << studentId << endl;
+        cout << "Major: " << major << endl;
+    }
+};
+
+class Faculty : public Person {
+private:
+    string department;
+    int employeeId;
+
+public:
+    Faculty(const string& n, int a, const string& d, int id) : Person(n, a), department(d), employeeId(id) {}
+
+    // Accessors
+    string getDepartment() const { return department; }
+    int getEmployeeId() const { return employeeId; }
+
+    // Mutators
+    void setDepartment(const string& d) {
+        if (d.empty()) {
+            throw invalid_argument("Department cannot be empty.");
+        }
+        department = d;
+    }
+
+    // Override getDetails to include faculty-specific information
+    void getDetails() const override {
+        Person::getDetails(); // Call base class getDetails
+        cout << "Department: " << department << endl;
+        cout << "Employee ID: " << employeeId << endl;
+    }
+};
+
+int main() {
+    Person p1("John Doe", 30);  // Create a Person object
+
+    Student s1("Jane Smith", 22, 12345, "Computer Science");  // Create a Student object
+    s1.getDetails();
+
+    Faculty f1("Alice Jones", 45, "Mathematics", 54321);  // Create a Faculty object
+    f1.getDetails();
+
+    return 0;
+}
+
+"Example"
+#include<iostream>
+using namespace std;
+class A
+{
+    public:
+    void display()
+    {
+        std::cout<<"class A"<<std::endl;
+    }
+};
+class B
+{
+    public:
+    void display()
+    {
+        std::cout<<"class B"<<std::endl;
+    }
+};
+class C: public A,public B
+{
+    void view()
+    {
+        A::display();
+        B::display();
+    }
+};
+int main()
+{
+   C c;
+   c.display();
+    return 0;
+}
+*Example*
+#include <iostream>
+#include <vector>
+#include <numeric> // For std::accumulate
+
+// Base class Person
+class Person {
+protected:
+    std::string name;
+    int id;
+
+public:
+    Person(const std::string& name, int id) : name(name), id(id) {}
+
+    // Getter for name
+    std::string getName() const {
+        return name;
+    }
+
+    // Getter for id
+    int getId() const {
+        return id;
+    }
+
+    // Method to display information
+    void displayInfo() const {
+        std::cout << "Name: " << name << ", ID: " << id << std::endl;
+    }
+};
+
+// Derived class Student
+class Student : public Person {
+private:
+    std::string major;
+    double gpa;
+
+public:
+    Student(const std::string& name, int id, const std::string& major, double gpa)
+        : Person(name, id), major(major), gpa(gpa) {}
+
+    // Method to calculate semester GPA
+    double calculateSemesterGPA(const std::vector<double>& grades) const {
+        if (grades.empty()) return 0.0;
+        double total = std::accumulate(grades.begin(), grades.end(), 0.0);
+        return total / grades.size();
+    }
+
+    // Getter for major
+    std::string getMajor() const {
+        return major;
+    }
+
+    // Getter for GPA
+    double getGpa() const {
+        return gpa;
+    }
+
+    // Method to display Student information
+    void displayStudentInfo() const {
+        displayInfo();
+        std::cout << "Major: " << major << ", GPA: " << gpa << std::endl;
+    }
+};
+
+// Derived class Faculty
+class Faculty : public Person {
+private:
+    std::string department;
+    std::string title;
+
+public:
+    Faculty(const std::string& name, int id, const std::string& department, const std::string& title)
+        : Person(name, id), department(department), title(title) {}
+
+    // Method to simulate teaching a course
+    void teachCourse(const std::string& courseName) const {
+        std::cout << name << " is teaching " << courseName << " in the " << department << " department." << std::endl;
+    }
+
+    // Getter for department
+    std::string getDepartment() const {
+        return department;
+    }
+
+    // Getter for title
+    std::string getTitle() const {
+        return title;
+    }
+
+    // Method to display Faculty information
+    void displayFacultyInfo() const {
+        displayInfo();
+        std::cout << "Department: " << department << ", Title: " << title << std::endl;
+    }
+};
+
+int main() {
+    // Create a Student object
+    Student student("Alice", 1, "Computer Science", 3.8);
+    std::vector<double> grades = {3.7, 3.9, 4.0, 3.6};
+    double semesterGPA = student.calculateSemesterGPA(grades);
+    std::cout << "Semester GPA: " << semesterGPA << std::endl;
+    student.displayStudentInfo();
+
+    // Create a Faculty object
+    Faculty faculty("Dr. Smith", 101, "Computer Science", "Professor");
+    faculty.teachCourse("Data Structures");
+    faculty.displayFacultyInfo();
+
+    return 0;
+}
