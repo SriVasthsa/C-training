@@ -235,3 +235,160 @@ int main() {
     return 0;
 }
 
+program 10:
+*Reference to an Integer:*
+    Write a function swap that takes two integer references and swaps their values. Demonstrate the function in the main program.
+#include <iostream>
+using namespace std;
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+int main() {
+    int num1 = 5, num2 = 10;
+    swap(&num1, &num2);
+    cout<<num1<<" "<<num2<<endl;
+    return 0;
+}
+
+program 11:
+*Reference to a Class Object:*
+    Write a class Box with a method volume. Create an object of this class and a reference to this object. Call the volume method using the reference.
+#include <iostream>
+using namespace std;
+class Box{
+    public:
+    void volume()
+    {
+        std::cout << "volume method called" << std::endl;
+    }
+};
+int main() 
+{
+    Box b;
+    Box &ref=b;
+    std::cout<<ref.volume()<< std::endl;
+    return 0;
+}
+
+program 12:
+*Returning Reference from a Function:*
+    Write a function that takes an array of integers and returns a reference to the largest element. Demonstrate the function in the main program.
+#include <iostream>
+using namespace std;
+int& findLargest(int arr[], int size) {
+    int maxIndex = 0;
+    for (int i = 1; i < size; ++i) {
+        if (arr[i] > arr[maxIndex]) {
+            maxIndex = i;
+        }
+    }
+    return arr[maxIndex];
+}
+int main() {
+    int arr[] = {12, 54, 8, 23, 67, 42};
+    int size = sizeof(arr) / sizeof(arr[0]);
+    int &largest = findLargest(arr, size);
+    std::cout << "The largest element in the array is: " << largest << std::endl;
+    largest = 100;
+    std::cout << "Array after modifying largest element: ";
+    for (int i = 0; i < size; ++i) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+    return 0;
+}
+
+program 13:
+*Pass by Value:*
+    Write a function addTen that takes an integer by value and adds 10 to it. Demonstrate how the original value is not changed after calling the function.
+#include <iostream>
+using namespace std;
+void addTen(int num) {
+    num += 10;
+    std::cout << "Inside function: num = " << num << std::endl;
+}
+int main() {
+    int number = 5;
+    std::cout << "Original value of number: " << number << std::endl;
+    addTen(number);
+    std::cout << "Value of number after function call: " << number << std::endl;
+    return 0;
+}
+
+program 14:
+*Pass by Reference:*
+    Write a function addTenRef that takes an integer by reference and adds 10 to it. Demonstrate how the original value is changed after calling the function.
+#include <iostream>
+void addTenRef(int &num) {
+    num += 10;
+}
+int main() {
+    int number = 5;
+    std::cout << "Original value of number: " << number << std::endl;
+    addTenRef(number);
+    std::cout << "Value of number after function call: " << number << std::endl;
+    return 0;
+}
+
+program 15:
+*Function Returning a Reference:*
+    Write a function that returns a reference to a static variable. Modify the returned value in the main function and print it.
+
+#include <iostream>
+int& staticVariable() {
+    static int num = 5;
+    return num;
+}
+int main() {
+    int &ref = staticVariable();
+    std::cout << "Original value of static variable: " << ref << std::endl;
+    ref += 10;
+    std::cout << "Modified value of static variable: " << ref << std::endl;
+    return 0;
+}
+
+
+program 16:
+*Passing Objects by Value and Reference:*
+    Write a class Employee with attributes name and salary. Write two functions: one that takes an Employee object by value and another that takes an Employee object by reference. Modify the salary in both functions and demonstrate the difference in the main program.
+#include <iostream>
+#include <string>
+class Employee {
+private:
+    std::string name;
+    double salary;
+
+public:
+    Employee(std::string n, double s) : name(n), salary(s) {}
+    std::string getName() const {
+        return name;
+    }
+    double getSalary() const {
+        return salary;
+    }
+    void modifySalaryByValue(double amount) {
+        salary += amount;
+    }
+    void modifySalaryByReference(double &amount) {
+        salary += amount;
+    }
+};
+int main() {
+    Employee emp("John Doe", 50000.0);
+    std::cout << "Initial details:" << std::endl;
+    std::cout << "Name: " << emp.getName() << std::endl;
+    std::cout << "Salary: $" << emp.getSalary() << std::endl;
+    double increaseByValue = 5000.0;
+    emp.modifySalaryByValue(increaseByValue);
+    std::cout << "\nAfter modifying salary by value:" << std::endl;
+    std::cout << "Name: " << emp.getName() << std::endl;
+    std::cout << "Salary: $" << emp.getSalary() << std::endl;
+    double increaseByReference = 10000.0;
+    emp.modifySalaryByReference(increaseByReference);
+    std::cout << "\nAfter modifying salary by reference:" << std::endl;
+    std::cout << "Name: " << emp.getName() << std::endl;
+    std::cout << "Salary: $" << emp.getSalary() << std::endl;
+    return 0;
+}
