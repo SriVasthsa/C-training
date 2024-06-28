@@ -1,0 +1,405 @@
+#include<iostream>
+using namespace std;
+void swapByValue(int a, int b)
+{
+int temp = a;
+a=b;
+b=temp;
+}
+void swapByReference(int &a, int &b)
+{
+    int temp =a ;
+    a=b;
+    b=temp;
+}
+int main()
+{
+    int num1=10, num2=30;
+    std::cout<<"num1 = "<<num1<<",num2="<<num2<<"\n";
+    swapByValue(num1, num2);
+    std::cout<<"After swapByValue:\n";
+    std::cout<<"num1="<<num1<<",num2="<<num2<<"\n";
+    swapByReference(num1, num2);
+    std::cout<<"After swapByReference:\n";
+    std::cout<<"num1="<<num1<<",num2="<<num2<<"\n";
+    return 0;
+}
+example:
+#include<iostream>
+using namespace std;
+void test (double a, double b)
+{
+    cout<<"x is "<<a<<endl<<"y is"<<b<<endl;
+}
+void test(int a, int b)
+{
+    cout<<"x is"<<a<<endl<<"y is"<<b<<endl;
+}
+int main()
+{
+    double x=7.0,y=9.0;
+    test(x,y);
+    test(x,y);
+    return 0;
+}
+Example:
+#include <iostream>
+
+class Distance {
+private:
+    int feet;
+    int inches;
+
+    // Helper function to normalize the distance
+    void normalize() {
+        if (inches >= 12) {
+            feet += inches / 12;
+            inches = inches % 12;
+        } else if (inches < 0) {
+            int borrow = (abs(inches) / 12) + 1;
+            feet -= borrow;
+            inches += borrow * 12;
+        }
+    }
+
+public:
+    // Constructors
+    Distance() : feet(0), inches(0) {}
+    Distance(int f, int i) : feet(f), inches(i) {
+        normalize();
+    }
+
+    // Display function
+    void display() const {
+        std::cout << feet << " feet " << inches << " inches" << std::endl;
+    }
+
+    // Operator overloading for addition
+    Distance operator+(const Distance &d) const {
+        return Distance(feet + d.feet, inches + d.inches);
+    }
+
+    // Operator overloading for subtraction
+    Distance operator-(const Distance &d) const {
+        return Distance(feet - d.feet, inches - d.inches);
+    }
+
+    // Comparison functions
+    int compare(const Distance &d) const {
+        if (feet > d.feet || (feet == d.feet && inches > d.inches))
+            return 1; // greater
+        if (feet < d.feet || (feet == d.feet && inches < d.inches))
+            return -1; // less
+        return 0; // equal
+    }
+
+    int isEqual(const Distance &d) const {
+        return compare(d) == 0;
+    }
+
+    int isNotEqual(const Distance &d) const {
+        return compare(d) != 0;
+    }
+
+    int isLessThan(const Distance &d) const {
+        return compare(d) < 0;
+    }
+
+    int isGreaterThan(const Distance &d) const {
+        return compare(d) > 0;
+    }
+
+    int isLessThanOrEqual(const Distance &d) const {
+        return compare(d) <= 0;
+    }
+
+    int isGreaterThanOrEqual(const Distance &d) const {
+        return compare(d) >= 0;
+    }
+};
+
+// Testing the Distance class
+int main() {
+    Distance d1(5, 9); // 5 feet 9 inches
+    Distance d2(3, 4); // 3 feet 4 inches
+
+    std::cout << "Distance 1: ";
+    d1.display();
+
+    std::cout << "Distance 2: ";
+    d2.display();
+
+    Distance d3 = d1 + d2;
+    std::cout << "Distance 1 + Distance 2: ";
+    d3.display();
+
+    Distance d4 = d1 - d2;
+    std::cout << "Distance 1 - Distance 2: ";
+    d4.display();
+
+    std::cout << "Distance 1 == Distance 2: " << d1.isEqual(d2) << std::endl;
+    std::cout << "Distance 1 != Distance 2: " << d1.isNotEqual(d2) << std::endl;
+    std::cout << "Distance 1 < Distance 2: " << d1.isLessThan(d2) << std::endl;
+    std::cout << "Distance 1 > Distance 2: " << d1.isGreaterThan(d2) << std::endl;
+    std::cout << "Distance 1 <= Distance 2: " << d1.isLessThanOrEqual(d2) << std::endl;
+    std::cout << "Distance 1 >= Distance 2: " << d1.isGreaterThanOrEqual(d2) << std::endl;
+
+    return 0;
+}
+
+Function over riding:
+Example:
+#include<iostream>
+using namespace std;
+class Animal
+{
+    public:
+    void eat()
+    {
+        cout<<"Eating..";
+    }
+};
+class Dog:public Animal
+{
+    public:
+    void eat()
+    {
+        cout<<"Eating bread..";
+    }
+};
+int main(void)
+{
+    Dog d=Dog();
+    d.eat();
+    return 0;
+}
+Virtual function:
+#include<iostream>
+using namespace std;
+class A
+{
+    int x = 5;
+    public:
+    void display()
+    {
+        std::cout<<"value of x is:"<<x<<std::endl;
+    }
+};
+Class B:public A
+{
+    int y =10;
+    public:
+    void display()
+    {
+        std::cout<<"value of y is"<<std::endl;
+    }
+};
+int main()
+{
+  A*a;
+  B b;
+  a = &b;
+  a->display();
+  return 0;
+}
+*Example 2*
+#include<iostream>
+using namespace std;
+{
+    public:
+    virtual void display()
+    {
+    cout<<"Base class is invoked"<<endl;
+    }
+};
+Class B:public A
+{
+    public:
+    void display()
+    {
+        cout<<"Derieved class is invoked"<<endl;
+    }
+};
+int main()
+{
+     A* a;
+     B b;
+     a = &b;
+     a->display();
+}
+Example:
+#include <iostream>
+
+// Base class
+class Shape {
+public:
+    virtual void draw() const = 0; // Pure virtual function
+    virtual ~Shape() {} // Virtual destructor
+};
+
+// Derived class for Square
+class Square : public Shape {
+public:
+    void draw() const override {
+        std::cout << "Drawing Square: []" << std::endl;
+    }
+};
+
+// Derived class for Circle
+class Circle : public Shape {
+public:
+    void draw() const override {
+        std::cout << "Drawing Circle: OOO" << std::endl;
+    }
+};
+
+// Derived class for Triangle
+class Triangle : public Shape {
+public:
+    void draw() const override {
+        std::cout << "Drawing Triangle: /\\\\" << std::endl;
+    }
+};
+
+// Function to print shape
+void printShape(const Shape* shape) {
+    shape->draw();
+}
+
+// Main function demonstrating polymorphism
+int main() {
+    // Creating objects of derived classes
+    Square square;
+    Circle circle;
+    Triangle triangle;
+
+    // Creating an array of Shape* and storing addresses of derived class objects
+    const Shape* shapes[] = { &square, &circle, &triangle };
+
+    // Calling printShape on each element
+    for (const Shape* shape : shapes) {
+        printShape(shape);
+    }
+
+    return 0;
+}
+Example:
+#include <iostream>
+#include <string>
+
+// Base class
+class Animal {
+public:
+    virtual ~Animal() {} // Virtual destructor
+    virtual std::string makeSound() const = 0; // Pure virtual function
+};
+
+// Derived class for Dog
+class Dog : public Animal {
+public:
+    std::string makeSound() const override {
+        return "Woof!";
+    }
+};
+
+// Derived class for Cat
+class Cat : public Animal {
+public:
+    std::string makeSound() const override {
+        return "Meow!";
+    }
+};
+
+// Derived class for Bird
+class Bird : public Animal {
+public:
+    std::string makeSound() const override {
+        return "Chirp!";
+    }
+};
+
+// Function to play the animal sound
+void playAnimalSound(const Animal* animal) {
+    std::cout << animal->makeSound() << std::endl;
+}
+
+int main() {
+    // Creating objects of derived classes
+    Dog dog;
+    Cat cat;
+    Bird bird;
+
+    // Creating an array of Animal* and storing addresses of derived class objects
+    const Animal* animals[] = { &dog, &cat, &bird };
+
+    // Calling playAnimalSound on each element
+    for (const Animal* animal : animals) {
+        playAnimalSound(animal);
+    }
+
+    return 0;
+}
+
+*Constructor:
+#include <iostream>
+using namespace std;
+class point
+{
+    public:
+    double x,y;
+    {
+        x=0.0; y=0.0;cout<<"default constructor"<<endl;
+    }
+    point(double nx, double ny)
+    {
+        x=nx; y=ny; cout<<2-parameter constructor"<<endl;
+    }
+};
+int main()
+{
+    point 1(1.0,2.0);
+    point r=q;
+}
+class point
+{
+    public:
+    double x,y;
+    point(double nx,double ny)
+    {
+        x=nx; y=ny;cout<<"custom copy constructor"<<endl;
+    }
+};
+int main()
+{
+    point q(1.0, 2.0);
+    point r=q;
+}
+Copy Constructor:
+#include <iostream>
+
+class Point {
+public:
+    double x, y;
+
+    // Default constructor
+    Point() : x(0.0), y(0.0) {
+        std::cout << "Default constructor" << std::endl;
+    }
+
+    // Parameterized constructor
+    Point(double nx, double ny) : x(nx), y(ny) {
+        std::cout << "2-parameter constructor" << std::endl;
+    }
+
+    // Copy constructor
+    Point(const Point& p) : x(p.x), y(p.y) {
+        std::cout << "Custom copy constructor" << std::endl;
+    }
+};
+
+int main() {
+    Point q(1.0, 2.9); // 2-parameter constructor
+    Point r = q; // Custom copy constructor
+
+    return 0;
+}
