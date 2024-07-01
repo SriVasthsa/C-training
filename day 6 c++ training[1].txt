@@ -1,0 +1,235 @@
+*Create a program that simulates a zoo with various animals. 
+Each animal should have a common method called "speak" that makes a sound specific to the animal type.
+
+Objective:
+
+Utilize runtime polymorphism to achieve the following:
+
+Define an abstract base class named Animal with a method speak that doesn't have an implementation (declare it abstract).
+Create subclasses for different animals like Lion, Elephant, etc., inheriting from Animal.
+Override the speak method in each subclass to define the specific sound of the animal (e.g., Lion roars, Elephant trumpets).
+In the main program, create an array of Animal references. Populate this array with objects of different animal subclasses.
+Loop through the animal array and call the speak method on each reference. 
+Since the references are of the base class type, runtime polymorphism will determine the actual subclass and invoke the appropriate overridden speak method.
+This exercise will demonstrate runtime polymorphism by:
+
+Highlighting the separation between declared type (reference variable type) and actual type (object type).
+Showing how the method call is resolved at runtime based on the actual object.*
+
+#CODE:
+#include<iostream>
+#include<vector>
+#include<memory>
+class Animal
+{
+    public:
+    virtual void speak() const=0;
+    virtual~Animal()=default;
+};
+class Lion:public Animal{
+    public:
+    void speak()const override
+    {
+        std::cout<<"Roar"<<std::endl;
+    }
+};
+class Elephant:public Animal{
+    public:
+    void speak() const override
+    {
+        std::cout<<"Trumpet"<<std::endl;
+    }
+};
+class Dog: public Animal
+{
+    public:
+    void speak()const override
+    {
+        std::cout<<"Bark"<<std::endl;
+    }
+};
+class Cat: public Animal{
+    public:
+    void speak()const override
+    {
+        std::cout<<"Meow"<<std::endl;
+    }
+};
+int main()
+{
+     std::vector<std::shared_ptr<Animal>> zoo;
+     zoo.push_back(std::make_shared<Lion>());
+     zoo.push_back(std::make_shared<Elephant>());
+     zoo.push_back(std::make_shared<Dog>());
+     zoo.push_back(std::make_shared<Cat>());
+     for (const auto& animal : zoo)
+     {
+        animal->speak();
+}
+return 0;
+}
+
+
+* Virtual  *
+#include<iostream>
+using namespace std;
+class Base
+{
+    public:
+    virtual void show()=0;
+};
+class derived : public Base
+{
+    public:
+    void show()
+    {
+        std::cout<<"Derived class is derived from base class"<<std::endl;
+    }
+};
+int main()
+{
+    Base*bptr;
+    //Base b;
+    Derived d;
+    bptr = &d;
+    bptr->show();
+    return 0;
+}
+
+* destructor*
+#include<iostream>
+using namespace std;
+class String
+{
+    private:
+    char* s;
+    int size;
+    public:
+    String(char*);
+    ~String();
+};
+String::String(char* c)
+{
+    size = strlen(c);
+    s= new char[size + 1];
+    strcpy(s, c);
+}
+String::~String(){delete[] s;}
+
+*Virtual DESTRUCTOR*
+
+#CODE
+#include<iostream>
+using namespace std;
+class base
+{
+    public:
+    base()
+    { cout<<"Constructing base \n";}
+    ~base()
+    {cout<<"Destructing base \n";}
+};
+class derived: public base{
+    public:
+    derived()
+    {cout<<"Constructing derived \n";}
+    ~derived()
+    {cout<<"Destructing derived \n";}
+};
+int main(void)
+{
+    derived *d = new derived();
+    base *b = d;
+    delete b;
+    getchar();
+    return 0;
+}
+
+*FRIEND CLASS AND FUNCTION*
+
+#CODE:
+#include<iostream>
+using namespace std;
+class A{
+    private:
+    int a;
+    public:
+    A()
+    { 
+        a=0;
+}
+friend class B;
+};
+class B{
+    private:
+    int b;
+    public:
+    void showA(A& x)
+    {
+        std:;cout<<"A::a"<<x.a;
+    }
+};
+int main()
+{
+    A a;
+    B b;
+    b.showA(a);
+    return 0;
+}
+
+*EXAMPLE*
+#include<iostream>
+using namespace std;
+class TemperatureSensor
+{
+    private:
+    double celsius;
+    public:
+    TemperatureSensor(double temp): celsius(temp){}
+    double getFahreinheit() const
+    {
+        return (celsius * 9 / 5) + 32;
+    }
+};
+void DisplayTemperature(const TemperatureSensor &sensor)
+{
+    std::cout<< "Temperature in Fahreinheit "<<sensor.getFahreinheit()<<std::endl;
+}
+int main()
+{
+    TemperatureSensor sensor(25);
+    DisplayTemperature(sensor);
+    return 0;
+}
+
+
+*example*
+#CODE:
+#include<iostream>
+using namespace std;
+class Point;
+class PointOutputStream
+{
+    public:
+    friend std::ostream& operator<<(std::ostream& os, const Point& point);
+};
+class point
+{
+    private:
+    int x;
+    int y;
+    public:
+    point(int x_value, int y_value): x(x_value), y(y_value){}
+    friend std::ostream& operator<<(std::ostream& os, const point& point){
+    os<<"("<< point.x <<" , "<<point.y<< ")";
+    return os;
+}
+};
+int main()
+{
+    point p1(5, 8);
+    point p2(-3, 6);
+    std::cout<<"point p1 "<<p1<<std::endl;
+    std::cout<<"point p2 " <<p2<<std::endl;
+    return 0;
+}
