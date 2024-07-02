@@ -1,0 +1,249 @@
+
+#include <iostream>
+#include <string>
+using namespace std;
+class User {
+private:
+    std::string userID;
+    std::string profilePicture;
+public:
+    User(const std::string& uID, const std::string& profilepic)
+        : userID(uID), profilePicture(profilepic) {}
+    std::string getUserID() const {
+        return userID;
+    }
+    std::string getProfilePicture() const {
+        return profilePicture;
+    }
+};
+class Post : public User {
+private:
+    std::string postData;
+    std::string time;
+
+public:
+    Post(const std::string& uID, const std::string& profilepic, const std::string& postdata, const std::string& time)
+        : User(uID, profilepic), postData(postdata), time(time) {}
+    std::string getPostInfo() const {
+        return "UserID: " + getUserID() + "\nProfile Picture: " + getProfilePicture() + "\nPost Data: " + postData + "\nTime: " + time;
+    }
+};
+void basicInteract(const User& user1, const User& user2) {
+    std::cout << user1.getUserID() << " interacts with " << user2.getUserID() << std::endl;
+}
+void likePost(User& user, Post& post) {
+    std::cout << user.getUserID() << " liked the post by " << post.getUserID() << std::endl;
+}
+void followUser(User& follower, User& followed) {
+    std::cout << follower.getUserID() << " started following " << followed.getUserID() << std::endl;
+}
+int main() {
+    User user1("Akshith", "Akshith_pic.png");
+    User user2("Vinay", "Vinay_pic.png");
+    Post post("Akshith", "Akshith_pic.png", "Hi Vinay", "2023-05-07 1:00");
+    basicInteract(user1, user2);
+    likePost(user2, post);
+    followUser(user1, user2);
+    std::cout << "\nPost Info:\n" << post.getPostInfo() << std::endl;
+    return 0;
+}
+
+*STATIC VARIABLE*
+#include<iostream>
+using namespace std;
+class MyClass
+{
+private:
+static int counter;
+public:
+MyClass()
+{
+    counter++;
+}
+static int getCount()
+{
+    return counter;
+}
+};
+int MyClass::counter = 0;
+int main()
+{
+    MyClass obj1;
+    MyClass obj2;
+    MyClass obj3;
+    std::cout<< "Number of objects created:"<<MyClass::getCount()<<std::endl;
+    return 0;
+}
+
+*Example*
+#include<iostream>
+using namespace std;
+class MyClass
+{
+private:
+static int counter;
+int count;
+public:
+MyClass()
+{
+    count++;
+    counter++;
+}
+static int getCounter()
+{
+    return counter;
+}
+int getCount()
+{
+    return count;
+}
+};
+int MyClass::counter = 0;
+int main()
+{
+    MyClass obj1;
+    MyClass obj2;
+    MyClass obj3;
+    MyClass obj4;
+    std::cout<< "Number of objects created:"<<MyClass::getCounter()<<std::endl;
+    std::cout<<"objects1 count method:" <<obj1.getCount() <<std::endl;
+    std::cout<<"objects2 count method:" <<obj2.getCount() <<std::endl;
+    std::cout<<"objects3 count method:" <<obj3.getCount() <<std::endl;
+    std::cout<<"objects4 count method:" <<obj4.getCount() <<std::endl;
+    return 0;
+}
+
+*Example*
+#include <iostream>
+using namespace std;
+class DistanceConverter {
+public:
+    static double convertMilesToKm(double miles) {
+        return miles * 1.60934;
+    }
+
+    static double convertKmToMiles(double kilometers) {
+        return kilometers / 1.60934;
+    }
+};
+class MathUtil {
+public:
+    static int add(int a, int b) {
+        return a + b;
+    }
+
+    static int subtract(int a, int b) {
+        return a - b;
+    }
+
+    static int multiply(int a, int b) {
+        return a * b;
+    }
+
+    static double divide(int a, int b) {
+        if (b == 0) {
+            cout << "Error: Division by zero" << endl;
+            return 0;
+        }
+        return static_cast<double>(a) / b;
+    }
+};
+class CurrencyConverter {
+public:
+    static double exchangeRate;
+
+    static double convertToEur(double amount) {
+        return amount * exchangeRate;
+    }
+
+    static double convertFromEur(double amount) {
+        return amount / exchangeRate;
+    }
+};
+double CurrencyConverter::exchangeRate = 0.85;
+
+int main() { 
+    double distance;
+    char unit;
+    cout << "Enter distance and unit (m for miles, k for km): ";
+    cin >> distance >> unit;
+    if (unit == 'm' || unit == 'M') {
+        cout << distance << " miles = " << DistanceConverter::convertMilesToKm(distance) << " kilometers." << endl;
+    } else if (unit == 'k' || unit == 'K') {
+        cout << distance << " kilometers = " << DistanceConverter::convertKmToMiles(distance) << " miles." << endl;
+    }
+     int num1, num2;
+    char operation;
+    cout << "Enter two numbers and operation (+, -, *, /): ";
+    cin >> num1 >> num2 >> operation;
+    switch (operation) {
+        case '+': cout << "Result: " << MathUtil::add(num1, num2) << endl; break;
+        case '-': cout << "Result: " << MathUtil::subtract(num1, num2) << endl; break;
+        case '*': cout << "Result: " << MathUtil::multiply(num1, num2) << endl; break;
+        case '/': cout << "Result: " << MathUtil::divide(num1, num2) << endl; break;
+        default: cout << "Invalid operation" << endl; break;
+    }
+  double amount;
+    char direction;
+    cout << "Enter amount and direction (u for USD to EUR, e for EUR to USD): ";
+    cin >> amount >> direction;
+    if (direction == 'u' || direction == 'U') {
+        cout << amount << " USD = " << CurrencyConverter::convertToEur(amount) << " EUR." << endl;
+    } else if (direction == 'e' || direction == 'E') {
+        cout << amount << " EUR = " << CurrencyConverter::convertFromEur(amount) << " USD." << endl;
+    }
+
+return 0;
+}
+ *FUNCTION TEMPLATES*
+#include<iostream>
+using namespace std;
+template<class T> T add(T &a, T &b)
+{
+    T result= a+b;
+    return result;
+}
+int main()
+{
+    int i= 2;
+    int j=3;
+    float m = 2.3;
+    float n =1.2;
+    cout<<"Addition of i and j is :"<<add(i,j);
+    cout<<'\n';
+    cout<<"Addition of m and n is :"<<add(m,n);
+    return 0;
+}
+
+*FUNCTION TEMPLATE WITH MULTIPLE PARAMETERS*
+#include<iostream>
+using namespace std;
+template<class X, class Y>void fun(X a, Y b)
+{
+    std::cout<<"value of a is:"<<a<<std::endl;
+    std::cout<<"value of b is:"<<b<<std::endl;
+}
+int main()
+{
+    fun(15, 12.3);
+    return 0;
+}
+
+* OVERLOADING FUNCTION TEMPLATE*
+#include<iostream>
+using namespace std;
+template<class X> void fun(X a)
+{
+    std::cout<<"value of a is:"<<a<<std::endl;
+}
+template<class X, class Y>void fun (X b, Y c)
+{
+    std::cout<<"value of b is :"<<b<<std::endl;
+    std::cout<<"value of c is :"<<c<<std::endl;
+}
+int main()
+{
+    fun(10);
+    fun(20,30.5);
+    return 0;
+}
