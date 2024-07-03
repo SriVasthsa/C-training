@@ -1,0 +1,483 @@
+*EXAMPLE 1*
+#include<iostream>
+using namespace std;
+template<typename T>
+T findMinimum(T arr[], int n)
+{
+    T min = arr[0];
+    for (int i=1; i<n;i++)
+    {
+        if(arr[i]<min)
+        {
+            min = arr[i];
+        }
+    }
+    return min;
+} 
+int main()
+{
+    int intArr[]={1,2,3,4,5,6,7};
+    double doubleArr[]= {1.3,4.6,2.3,2.4,2.6};
+    char charArr[]={'a', 'b', 'c', 'd','e'};
+    int intSize = sizeof(intArr) / sizeof(intArr[0]);
+    int doubleSize = sizeof(doubleArr) / sizeof(doubleArr[0]);
+    int charSize = sizeof(charArr) / sizeof(charArr[0]);
+    cout<<"Minimum in intArr :"<<findMinimum(intArr, intSize)<<endl;
+    cout<<"Minimum in doubleArr :"<<findMinimum(doubleArr, doubleSize)<<endl;
+    cout<<"Minimum in charArr: "<<findMinimum(charArr, charSize)<<endl;
+    return 0;
+}
+
+
+*EXAMPLE 2*
+#include <iostream>
+using namespace std;
+
+template <typename T>
+void mySwap(T& a, T& b) {
+    T temp = a;
+    a = b;
+    b = temp;
+}
+int main() {
+    int m = 23, n = 25;
+    mySwap(m, n);
+    std::cout << " swap: m = " << m << ", n = " << n << std::endl;
+    double a = 28, b = 39;
+    mySwap(a, b);
+    std::cout << " swap: a = " << a << ", b = " << b << std::endl;
+
+    return 0;
+}
+
+
+*EXAMPLE 3*
+#include<iostream>
+using namespace std;
+template<typename T>
+T  findMaximum(T arr[], int size)
+{
+    T max = arr[0];
+    for(int i=1; i<size; ++i)
+    {
+        if(arr[i]>max)
+        {
+            max=arr[i];
+        }
+    }
+    return max;
+}
+int main()
+{
+    int intArray[]={1,2,3,4,5,6,7,8};
+    double doubleArray[]={1.8,3.3,4.4, 5.5};
+    int maxInt = findMaximum(intArray, 5);
+    double maxDouble = findMaximum(doubleArray, 4);
+    std::cout<<"Maximum integer:"<<maxInt <<std::endl;
+    std::cout<<"Maximum double:"<<maxDouble<<std::endl;
+    return 0;
+}
+
+*CLASS TEMPLATE*
+#include<iostream>
+using namespace std;
+void fun(double a)
+{
+    cout<<"value of a is"<<a<<'\n';
+}
+void fun(int b)
+{
+    if(b%2==0)
+    {
+        cout<<"Number is even";
+    }
+    else
+    {
+        cout<<"Number is odd";
+        
+    }
+}
+
+EXAMPLE 2:
+#include<iostream>
+using namespace std;
+template<class T>
+class A
+{
+    public:
+    T num1 = 5;
+    T num2 = 6;
+    void add()
+    {
+        std::cout<<"Addition of num1 and num2:"<<num1+num2<<std::endl;
+    }
+};
+int main()
+{
+    A<int>d;
+    d.add();
+    return 0;
+}
+
+EXAMPLE 3:
+#include<iostream>
+using namespace std;
+template<class T1, class T2>
+class A
+{
+    T1 a;
+    T2 b;
+    public:
+    A(T1 x, T2 y)
+    {
+        a = x;
+        b = y;
+    }
+    void display()
+    {
+        std::cout<<"values of a ad b are:" <<a<<", "<<b<<std::endl;
+    }
+};
+int main()
+{
+    A<int,float>d(5,6,5);
+    d.display();
+    return 0;
+}
+
+*EXAMPLE 4:
+#include <iostream>
+using namespace std;
+template <typename T>
+class DataContainer {
+private:
+    T* elements;
+    size_t capacity;
+    size_t currentSize;
+
+public:
+    DataContainer(size_t size = 0) : capacity(size), currentSize(size) {
+        elements = new T[capacity];
+    }
+    ~DataContainer() {
+        delete[] elements;
+    }
+    DataContainer(const DataContainer& other) : capacity(other.capacity), currentSize(other.currentSize) {
+        elements = new T[capacity];
+        for (size_t i = 0; i < currentSize; ++i) {
+            elements[i] = other.elements[i];
+        }
+    }
+    DataContainer& operator=(const DataContainer& other) {
+        if (this != &other) {
+            delete[] elements;
+            capacity = other.capacity;
+            currentSize = other.currentSize;
+            elements = new T[capacity];
+            for (size_t i = 0; i < currentSize; ++i) {
+                elements[i] = other.elements[i];
+            }
+        }
+        return *this;
+    }
+    T& operator[](size_t index) {
+        if (index >= currentSize) {
+            std::cerr << "Error: Index out of range" << std::endl;
+            exit(1); 
+        }
+        return elements[index];
+    }
+    void printAll() const {
+        for (size_t i = 0; i < currentSize; ++i) {
+            std::cout << elements[i] << " ";
+        }
+        std::cout << std::endl;
+    }
+    size_t size() const {
+        return currentSize;
+    }
+    void push_back(const T& value) {
+        if (currentSize >= capacity) {
+            // Double the capacity if full
+            size_t newCapacity = capacity == 0 ? 1 : capacity * 2;
+            T* newElements = new T[newCapacity];
+            for (size_t i = 0; i < currentSize; ++i) {
+                newElements[i] = elements[i];
+            }
+            delete[] elements;
+            elements = newElements;
+            capacity = newCapacity;
+        }
+        elements[currentSize++] = value;
+    }
+    template <typename U>
+    void swap(DataContainer<U>& other) {
+        if (currentSize != other.size()) {
+            std::cerr << "Error: Containers must be of the same size to swap" << std::endl;
+            exit(1); 
+        }
+        for (size_t i = 0; i < currentSize; ++i) {
+            T temp = elements[i];
+            elements[i] = static_cast<T>(other[i]);
+            other[i] = static_cast<U>(temp);
+        }
+    }
+};
+template <typename T>
+void bubbleSort(DataContainer<T>& container) {
+    size_t n = container.size();
+    bool swapped;
+    do {
+        swapped = false;
+        for (size_t i = 1; i < n; ++i) {
+            if (container[i - 1] > container[i]) {
+                T temp = container[i - 1];
+                container[i - 1] = container[i];
+                container[i] = temp;
+                swapped = true;
+            }
+        }
+        n--;
+    } while (swapped);
+}
+int main() {
+
+    DataContainer<int> intContainer(5);
+    DataContainer<float> floatContainer(4);
+    DataContainer<std::string> stringContainer(3);
+    for (size_t i = 0; i < intContainer.size(); ++i) {
+        intContainer[i] = 5 - i;
+    }
+    floatContainer[0] = 3.5f;
+    floatContainer[1] = 1.2f;
+    floatContainer[2] = 6.7f;
+    floatContainer[3] = 2.1f;
+stringContainer[0] = "carrot";
+    stringContainer[1] = "mango";
+    stringContainer[2] = "guava";
+    std::cout << "Int Container: ";
+    intContainer.printAll();
+
+    std::cout << "Float Container: ";
+    floatContainer.printAll();
+
+    std::cout << "String Container: ";
+    stringContainer.printAll();
+std::cout << "\nSwapping intContainer and floatContainer:\n";
+    intContainer.swap(floatContainer);
+    std::cout << "After swap:\n";
+    std::cout << "Int Container: ";
+    intContainer.printAll();
+    std::cout << "Float Container: ";
+    floatContainer.printAll();
+
+    // Demonstrate sorting with Bubble Sort
+    std::cout << "\nSorting intContainer using Bubble Sort:\n";
+    bubbleSort(intContainer);
+    std::cout << "After sorting:\n";
+    std::cout << "Int Container: ";
+    intContainer.printAll();
+return 0;
+}
+
+*Smartpointer*
+#include<iostream>
+using namespace std;
+template<class T>
+class Smartpointer
+{
+    T * p;
+    public:
+    Smartpointer(T *ptr= NULL)
+    {
+        p = ptr;
+    }
+    ~Smartpointer()
+    {
+        delete(p);
+    }
+    T& operator * ()
+    {
+        return *p;
+    }
+};
+int main()
+{
+    Smartpointer<int>p(new int());
+    *p =25;
+    cout<<"value is "<<*p;
+    return 0;
+}
+*Example *
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
+class Product {
+protected:
+    std::string name;
+    double price;
+    int quantity;
+public:
+    Product(const std::string& n, double p, int q) : name(n), price(p), quantity(q) {}
+    virtual ~Product() {}
+    virtual void display() const = 0;
+    virtual double calculateTotalPrice() const = 0;
+    std::string getName() const { return name; }
+    double getPrice() const { return price; }
+    int getQuantity() const { return quantity; }
+
+    void setQuantity(int q) { quantity = q; }
+};
+class PerishableProduct : public Product {
+private:
+    std::string expiryDate;
+
+public:
+    PerishableProduct(const std::string& n, double p, int q, const std::string& ed)
+        : Product(n, p, q), expiryDate(ed) {}
+
+    void display() const override {
+        std::cout << "Perishable Product: " << name << ", Price: " << price
+                  << ", Quantity: " << quantity << ", Expiry Date: " << expiryDate << std::endl;
+    }
+
+    double calculateTotalPrice() const override {
+        return price * quantity;
+    }
+
+    std::string getExpiryDate() const { return expiryDate; }
+};
+class ElectronicProduct : public Product {
+private:
+    int warrantyPeriod; 
+public:
+    ElectronicProduct(const std::string& n, double p, int q, int wp)
+        : Product(n, p, q), warrantyPeriod(wp) {}
+
+    void display() const override {
+        std::cout << "Electronic Product: " << name << ", Price: " << price
+                  << ", Quantity: " << quantity << ", Warranty Period: " << warrantyPeriod << " months" << std::endl;
+    }
+    double calculateTotalPrice() const override {
+        return price * quantity;
+    }
+    int getWarrantyPeriod() const { return warrantyPeriod; }
+};
+class FurnitureProduct : public Product {
+private:
+    std::string materialType;
+public:
+    FurnitureProduct(const std::string& n, double p, int q, const std::string& mt)
+        : Product(n, p, q), materialType(mt) {}
+
+    void display() const override {
+        std::cout << "Furniture Product: " << name << ", Price: " << price
+                  << ", Quantity: " << quantity << ", Material: " << materialType << std::endl;
+    }
+    double calculateTotalPrice() const override {
+        return price * quantity;
+    }
+    std::string getMaterialType() const { return materialType; }
+};
+int main() {
+    std::vector<std::shared_ptr<Product>> inventory;
+    inventory.push_back(std::make_shared<PerishableProduct>("Yogurt", 1.99, 20, "2024-07-15"));
+    inventory.push_back(std::make_shared<ElectronicProduct>("Smartphone", 699.99, 3, 24));
+    inventory.push_back(std::make_shared<FurnitureProduct>("Dining Table", 299.99, 2, "Wood"));
+    for (const auto& product : inventory) {
+        product->display();
+    }
+    double totalInventoryValue = 0.0;
+    for (const auto& product : inventory) {
+        totalInventoryValue += product->calculateTotalPrice();
+    }
+    std::cout << "Total Inventory Value: $" << totalInventoryValue << std::endl;
+    return 0;
+}
+#include <iostream>
+#include <string>
+#include <vector>
+#include <memory>
+
+// Abstract base class for files
+class File {
+protected:
+    std::string fileName;
+
+public:
+    File(const std::string& name) : fileName(name) {}
+
+    virtual ~File() {}
+
+    virtual void read() const = 0;
+    virtual void write(const std::string& content) = 0;
+};
+
+// Derived class for text files
+class TextFile : public File {
+public:
+    TextFile(const std::string& name) : File(name) {}
+
+    void read() const override {
+        std::cout << "Reading from text file: " << fileName << std::endl;
+        // Simulate reading operation
+    }
+
+    void write(const std::string& content) override {
+        std::cout << "Writing to text file: " << fileName << std::endl;
+        std::cout << "Content: " << content << std::endl;
+        // Simulate writing operation
+    }
+};
+
+// Derived class for image files
+class ImageFile : public File {
+public:
+    ImageFile(const std::string& name) : File(name) {}
+
+    void read() const override {
+        std::cout << "Reading from image file: " << fileName << std::endl;
+        // Simulate reading operation
+    }
+
+    void write(const std::string& content) override {
+        std::cout << "Writing to image file: " << fileName << std::endl;
+        std::cout << "Content: " << content << std::endl;
+        // Simulate writing operation
+    }
+};
+
+// Derived class for binary files
+class BinaryFile : public File {
+public:
+    BinaryFile(const std::string& name) : File(name) {}
+
+    void read() const override {
+        std::cout << "Reading from binary file: " << fileName << std::endl;
+        // Simulate reading operation
+    }
+
+    void write(const std::string& content) override {
+        std::cout << "Writing to binary file: " << fileName << std::endl;
+        std::cout << "Content: " << content << std::endl;
+        // Simulate writing operation
+    }
+};
+
+int main() {
+    std::vector<std::shared_ptr<File>> files;
+
+    // Adding different types of files to the vector
+    files.push_back(std::make_shared<TextFile>("document.txt"));
+    files.push_back(std::make_shared<ImageFile>("photo.jpg"));
+    files.push_back(std::make_shared<BinaryFile>("data.bin"));
+
+    // Performing read and write operations on the files
+    for (const auto& file : files) {
+        file->read();
+        file->write("Sample content");
+    }
+
+    return 0;
+}
