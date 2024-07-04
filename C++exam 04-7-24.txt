@@ -1,0 +1,382 @@
+Example 1 :
+
+#include <iostream>
+class Shape {
+public:
+    virtual void draw() const {
+        std::cout << "Drawing a shape." << std::endl;
+    }
+    virtual ~Shape() = default;
+};
+class Circle : public Shape {
+public:
+    void draw() const override {
+        std::cout << "Drawing a circle." << std::endl;
+    }
+};
+class Rectangle : public Shape {
+public:
+    void draw() const override {
+        std::cout << "Drawing a rectangle." << std::endl;
+    }
+};
+class Triangle : public Shape {
+public:
+    // Override the draw function
+    void draw() const override {
+        std::cout << "Drawing a triangle." << std::endl;
+    }
+};
+void drawShape(const Shape* shape) {
+    shape->draw();
+}
+int main() {
+    Circle circle;
+    Rectangle rectangle;
+    Triangle triangle;
+    drawShape(&circle);
+    drawShape(&rectangle);
+    drawShape(&triangle);
+    return 0;
+}
+
+Example 2 :
+
+#include <iostream>
+class Account {
+public:
+    static int totalAccounts;
+    Account() {
+        ++totalAccounts;
+    }
+    ~Account() {
+        --totalAccounts;
+    }
+    static void displayTotalAccounts() {
+        std::cout << "Total accounts: " << totalAccounts << std::endl;
+    }
+};
+int Account::totalAccounts = 0;
+int main() {
+    Account acc1;
+    Account acc2;
+    Account::displayTotalAccounts();
+    {
+        Account acc3;
+        Account::displayTotalAccounts();
+    }
+    Account::displayTotalAccounts(); // Output: Total accounts: 2
+    return 0;
+}
+
+Example 3 :
+
+#include <iostream>
+class Box {
+private:
+    double length;
+    double breadth;
+    double height;
+public:
+    Box(double l, double b, double h) : length(l), breadth(b), height(h) {}
+    friend double volume(const Box& b);
+};
+double volume(const Box& b) {
+    return b.length * b.breadth * b.height;
+}
+int main() {
+    Box box1(3.0, 4.0, 5.0);
+    Box box2(6.0, 7.0, 8.0);
+    std::cout << "Volume of box1: " << volume(box1) << std::endl; 
+    std::cout << "Volume of box2: " << volume(box2) << std::endl; 
+    return 0;
+}
+
+Example 4 :
+
+#include <iostream>
+#include <vector>
+template <typename T>
+class Array {
+private:
+    std::vector<T> arr;
+public:
+    void addElement(T element) {
+        arr.push_back(element);
+    }
+    void removeElement() {
+        if (!arr.empty()) {
+            arr.pop_back();
+        } else {
+            std::cout << "Array is empty. Cannot remove element." << std::endl;
+        }
+    }
+    void display() const {
+        for (const auto& element : arr) {
+            std::cout << element << " ";
+        }
+        std::cout << std::endl;
+    }
+};
+int main() {
+    Array<int> intArray;
+    intArray.addElement(1);
+    intArray.addElement(2);
+    intArray.addElement(3);
+    std::cout << "Integer Array: ";
+    intArray.display(); 
+    intArray.removeElement();
+    std::cout << "Integer Array after removal: ";
+    intArray.display(); 
+    Array<double> doubleArray;
+    doubleArray.addElement(1.1);
+    doubleArray.addElement(2.2);
+    doubleArray.addElement(3.3);
+    std::cout << "Double Array: ";
+    doubleArray.display();
+    doubleArray.removeElement();
+    std::cout << "Double Array after removal: ";
+    doubleArray.display();
+    Array<std::string> stringArray;
+    stringArray.addElement("Hello");
+    stringArray.addElement("World");
+    stringArray.addElement("!");
+    std::cout << "String Array: ";
+    stringArray.display(); 
+    stringArray.removeElement();
+    std::cout << "String Array after removal: ";
+    stringArray.display(); 
+    return 0;
+}
+
+Example 5 :
+
+#include <iostream>
+#include <string>
+class Student {
+private:
+    std::string name;
+    int age;
+public:
+    void setDetails(const std::string& studentName, int studentAge) {
+        name = studentName;
+        age = studentAge;
+    }
+    void displayDetails() const {
+        std::cout << "Name: " << name << ", Age: " << age << std::endl;
+    }
+};
+void deallocateMemory(Student* students) {
+    delete[] students;
+}
+int main() {
+    int numberOfStudents;
+    std::cout << "Enter the number of students: ";
+    std::cin >> numberOfStudents;
+    Student* students = new Student[numberOfStudents];
+    for (int i = 0; i < numberOfStudents; ++i) {
+        std::string name;
+        int age;
+        std::cout << "Enter name for student " << i + 1 << ": ";
+        std::cin >> name;
+        std::cout << "Enter age for student " << i + 1 << ": ";
+        std::cin >> age;
+        students[i].setDetails(name, age);
+    }
+    std::cout << "\nStudent Details:" << std::endl;
+    for (int i = 0; i < numberOfStudents; ++i) {
+        students[i].displayDetails();
+    }
+    deallocateMemory(students);
+    return 0;
+}
+
+Example 6 :
+
+#include <iostream>
+class Animal {
+public:
+    // Pure virtual function
+    virtual void sound() const = 0;
+};
+class Dog : public Animal {
+public:
+    void sound() const override {
+        std::cout << "Dog barks" << std::endl;
+    }
+};
+class Cat : public Animal {
+public:
+    void sound() const override {
+        std::cout << "Cat meows" << std::endl;
+    }
+};
+class Cow : public Animal {
+public:
+    void sound() const override {
+        std::cout << "Cow moos" << std::endl;
+    }
+};
+int main() {
+    Dog dog;
+    Cat cat;
+    Cow cow;
+    Animal* animal1 = &dog;
+    Animal* animal2 = &cat;
+    Animal* animal3 = &cow;
+    animal1->sound(); // Output: Dog barks
+    animal2->sound(); // Output: Cat meows
+    animal3->sound(); // Output: Cow moos
+    return 0;
+}
+
+Example 7 :
+
+#include <iostream>
+class Math {
+public:
+    static int add(int a, int b) {
+        return a + b;
+    }
+    static int subtract(int a, int b) {
+        return a - b;
+    }
+    static int multiply(int a, int b) {
+        return a * b;
+    }
+    static double divide(int a, int b) {
+        if (b != 0) {
+            return static_cast<double>(a) / b;
+        } else {
+            std::cerr << "Error: Division by zero!" << std::endl;
+            return 0.0;
+        }
+    }
+};
+int main() {
+    std::cout << "Addition: " << Math::add(5, 3) << std::endl;         
+    std::cout << "Subtraction: " << Math::subtract(5, 3) << std::endl; 
+    std::cout << "Multiplication: " << Math::multiply(5, 3) << std::endl; 
+    std::cout << "Division: " << Math::divide(10, 2) << std::endl;     
+    std::cout << "Division by zero: " << Math::divide(5, 0) << std::endl; 
+    return 0;
+}
+
+Example 8 :
+
+#include <iostream>
+class Beta;
+class Alpha {
+private:
+    int privateData;
+public:
+    Alpha(int data) : privateData(data) {}
+    friend class Beta;
+};
+class Beta {
+public:
+    void manipulateAlpha(Alpha& alpha, int newData) {
+        alpha.privateData = newData;
+        std::cout << "Beta manipulated Alpha's privateData to: " << alpha.privateData << std::endl;
+    }
+};
+int main() {
+    Alpha alphaObj(42);
+    Beta betaObj;
+    betaObj.manipulateAlpha(alphaObj, 99);
+    return 0;
+}
+
+Example 9 :
+
+#include <iostream>
+template <typename T1, typename T2>
+class Pair {
+private:
+    T1 first;
+    T2 second;
+public:
+    Pair(const T1& f, const T2& s) : first(f), second(s) {}
+    void setPair(const T1& f, const T2& s) {
+        first = f;
+        second = s;
+    }
+    T1 getFirst() const {
+        return first;
+    }
+    T2 getSecond() const {
+        return second;
+    }
+};
+int main() {
+    Pair<int, int> intPair(1, 2);
+    std::cout << "Pair of integers: (" << intPair.getFirst() << ", " << intPair.getSecond() << ")" << std::endl;
+    Pair<double, std::string> doubleStringPair(3.14, "Hello");
+    std::cout << "Pair of double and string: (" << doubleStringPair.getFirst() << ", " << doubleStringPair.getSecond() << ")" << std::endl;
+    Pair<char, bool> charBoolPair('A', true);
+    std::cout << "Pair of char and bool: (" << charBoolPair.getFirst() << ", " << charBoolPair.getSecond() << ")" << std::endl;
+    return 0;
+}
+ 
+
+Example 10 :
+
+#include <iostream>
+#include <string>
+class Book {
+private:
+    std::string title;
+    std::string author;
+public:
+    Book(const std::string& t, const std::string& a) : title(t), author(a) {}
+    void setDetails(const std::string& t, const std::string& a) {
+        title = t;
+        author = a;
+    }
+    void displayDetails() const {
+        std::cout << "Title: " << title << std::endl;
+        std::cout << "Author: " << author << std::endl;
+    }
+    std::string getTitle() const {
+        return title;
+    }
+};
+int main() {
+    const int MAX_BOOKS = 5;
+    Book* library[MAX_BOOKS];
+    std::cout << "Enter details for " << MAX_BOOKS << " books:" << std::endl;
+    for (int i = 0; i < MAX_BOOKS; ++i) {
+        std::string title, author;
+        std::cout << "Book " << (i + 1) << " Title: ";
+        std::getline(std::cin, title); 
+        std::cout << "Book " << (i + 1) << " Author: ";
+        std::getline(std::cin, author);
+        library[i] = new Book(title, author);
+    }
+    std::cout << "\nDetails of all books:" << std::endl;
+    for (int i = 0; i < MAX_BOOKS; ++i) {
+        std::cout << "Book " << (i + 1) << ":" << std::endl;
+        library[i]->displayDetails();
+        std::cout << std::endl;
+    }
+    std::string searchTitle;
+    std::cout << "Enter the title of the book to search: ";
+    std::getline(std::cin, searchTitle);
+    bool found = false;
+    for (int i = 0; i < MAX_BOOKS; ++i) {
+        if (library[i]->getTitle() == searchTitle) {
+            std::cout << "\nBook found:" << std::endl;
+            library[i]->displayDetails();
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        std::cout << "\nBook with title \"" << searchTitle << "\" not found." << std::endl;
+    }
+    for (int i = 0; i < MAX_BOOKS; ++i) {
+        delete library[i];
+    }
+    return 0;
+}
+4

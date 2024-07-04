@@ -1,0 +1,324 @@
+Example : 1
+
+#include <iostream>
+using namespace std;
+class Shape {
+public:
+    virtual void draw() const = 0; 
+    virtual ~Shape() {} 
+};
+class Circle : public Shape {
+public:
+    void draw() const override {
+        cout << "Drawing a Circle" << endl;
+    }
+};
+class Square : public Shape {
+public:
+    void draw() const override {
+        cout << "Drawing a Square" << endl;
+    }
+};
+class Triangle : public Shape {
+public:
+    void draw() const override {
+        cout << "Drawing a Triangle" << endl;
+    }
+};
+int main() {
+    Shape* shapes[3];
+    shapes[0] = new Circle();
+    shapes[1] = new Square();
+    shapes[2] = new Triangle();
+    for (int i = 0; i < 3; ++i) {
+        shapes[i]->draw();
+    }
+    for (int i = 0; i < 3; ++i) {
+        delete shapes[i];
+    }
+    return 0;
+}
+
+Example : 2
+
+#include <iostream>
+using namespace std;
+class Animal {
+public:
+    virtual void makeSound() const = 0; 
+    virtual ~Animal() {} 
+};
+class Cat : public Animal {
+public:
+    void makeSound() const override {
+        cout << "Meow" << endl;
+    }
+};
+class Dog : public Animal {
+public:
+    void makeSound() const override {
+        cout << "Woof" << endl;
+    }
+};
+class Cow : public Animal {
+public:
+    void makeSound() const override {
+        cout << "Moo" << endl;
+    }
+};
+void playAnimalSound(const Animal& animal) {
+    animal.makeSound();
+}
+int main() {
+    Cat cat;
+    Dog dog;
+    Cow cow;
+    playAnimalSound(cat); // Output: Meow
+    playAnimalSound(dog); // Output: Woof
+    playAnimalSound(cow); // Output: Moo
+    return 0;
+}
+
+Example  : 3
+
+#include <iostream>
+#include <cmath> // For M_PI (Pi constant)
+using namespace std;
+class Shape {
+public:
+    virtual double area() const {
+        return 0; // Base class returns 0
+    }
+    virtual ~Shape() = 0; 
+};
+Shape::~Shape() {}
+class Circle : public Shape {
+public:
+    Circle(double r) : radius(r) {}
+    double area() const override {
+        return M_PI * radius * radius;
+    }
+private:
+    double radius;
+};
+class Square : public Shape {
+public:
+    Square(double s) : side(s) {}
+    double area() const override {
+        return side * side;
+    }
+private:
+    double side;
+};
+class Triangle : public Shape {
+public:
+    Triangle(double b, double h) : base(b), height(h) {}
+    double area() const override {
+        return 0.5 * base * height;
+    }
+private:
+    double base, height;
+};
+int main() {
+    Shape* shapes[3];
+    shapes[0] = new Circle(5.0);     
+    shapes[1] = new Square(4.0);     
+    shapes[2] = new Triangle(3.0, 6.0);
+    for (int i = 0; i < 3; ++i) {
+        cout << "Area: " << shapes[i]->area() << endl;
+    }
+    for (int i = 0; i < 3; ++i) {
+        delete shapes[i];
+    }
+    return 0;
+}
+
+Example : 4
+
+#include <iostream>
+using namespace std;
+class Shape {
+public:
+    Shape(const string& col) : color(col) {}
+    virtual ~Shape() {
+        cout << "Shape destructor called" << endl;
+    }
+    virtual void print() const {
+        cout << "Color: " << color << endl;
+    }
+private:
+    string color;
+};
+class Circle : public Shape {
+public:
+    Circle(const string& col, double r) : Shape(col), radius(r) {}
+    ~Circle() override {
+        cout << "Circle destructor called" << endl;
+    }
+    void print() const override {
+        Shape::print();
+        cout << "Radius: " << radius << endl;
+    }
+private:
+    double radius;
+};
+
+int main() {
+    Circle circle("Red", 5.0);
+    Shape& shapeRef = circle;
+    shapeRef.print();
+    return 0;
+}
+
+Example : 5
+
+#include <iostream>
+#include <typeinfo> 
+using namespace std;
+class Shape {
+public:
+    virtual void draw() const {
+        cout << "Drawing a shape" << endl;
+    }
+    virtual ~Shape() {}
+};
+class Circle : public Shape {
+public:
+    void draw() const override {
+        cout << "Drawing a circle" << endl;
+    }
+};
+class Square : public Shape {
+public:
+    void draw() const override {
+        cout << "Drawing a square" << endl;
+    }
+};
+
+// Derived class Triangle
+class Triangle : public Shape {
+public:
+    void draw() const override {
+        cout << "Drawing a triangle" << endl;
+    }
+};
+void identifyObject(const Shape& shape) {
+    if (typeid(shape) == typeid(Circle)) {
+        cout << "This is a Circle" << endl;
+    } else if (typeid(shape) == typeid(Square)) {
+        cout << "This is a Square" << endl;
+    } else if (typeid(shape) == typeid(Triangle)) {
+        cout << "This is a Triangle" << endl;
+    } else {
+        cout << "This is an unknown Shape" << endl;
+    }
+}
+int main() {
+    Circle circle;
+    Square square;
+    Triangle triangle;
+    Shape* shapePtr = &circle;
+    cout << "Type of shapePtr: " << typeid(*shapePtr).name() << endl;
+    shapePtr = &square;
+    cout << "Type of shapePtr: " << typeid(*shapePtr).name() << endl;
+    shapePtr = &triangle;
+    cout << "Type of shapePtr: " << typeid(*shapePtr).name() << endl;
+    identifyObject(circle);
+    identifyObject(square);
+    identifyObject(triangle);
+    return 0;
+}
+
+Example 1 :
+
+#include <iostream>
+class Shape {
+public:
+    virtual void draw() const {
+        std::cout << "Drawing a shape." << std::endl;
+    }
+    virtual ~Shape() = default;
+};
+class Circle : public Shape {
+public:
+    void draw() const override {
+        std::cout << "Drawing a circle." << std::endl;
+    }
+};
+class Rectangle : public Shape {
+public:
+    void draw() const override {
+        std::cout << "Drawing a rectangle." << std::endl;
+    }
+};
+class Triangle : public Shape {
+public:
+    // Override the draw function
+    void draw() const override {
+        std::cout << "Drawing a triangle." << std::endl;
+    }
+};
+void drawShape(const Shape* shape) {
+    shape->draw();
+}
+int main() {
+    Circle circle;
+    Rectangle rectangle;
+    Triangle triangle;
+    drawShape(&circle);
+    drawShape(&rectangle);
+    drawShape(&triangle);
+    return 0;
+}
+
+Example 2 :
+
+#include <iostream>
+class Account {
+public:
+    static int totalAccounts;
+    Account() {
+        ++totalAccounts;
+    }
+    ~Account() {
+        --totalAccounts;
+    }
+    static void displayTotalAccounts() {
+        std::cout << "Total accounts: " << totalAccounts << std::endl;
+    }
+};
+int Account::totalAccounts = 0;
+int main() {
+    Account acc1;
+    Account acc2;
+    Account::displayTotalAccounts();
+    {
+        Account acc3;
+        Account::displayTotalAccounts();
+    }
+    Account::displayTotalAccounts(); // Output: Total accounts: 2
+    return 0;
+}
+
+Example 3 :
+
+#include <iostream>
+class Box {
+private:
+    double length;
+    double breadth;
+    double height;
+public:
+    Box(double l, double b, double h) : length(l), breadth(b), height(h) {}
+    friend double volume(const Box& b);
+};
+double volume(const Box& b) {
+    return b.length * b.breadth * b.height;
+}
+int main() {
+    Box box1(3.0, 4.0, 5.0);
+    Box box2(6.0, 7.0, 8.0);
+    std::cout << "Volume of box1: " << volume(box1) << std::endl; 
+    std::cout << "Volume of box2: " << volume(box2) << std::endl; 
+    return 0;
+}
