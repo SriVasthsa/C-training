@@ -1,0 +1,490 @@
+Example 1 :
+
+#include <iostream>
+#include <string>
+int main() {
+    auto add = [](int a, int b) {
+        return a + b;
+    };
+    int sumResult = add(3, 4);
+    std::cout << "Sum: " << sumResult << std::endl;
+    int x = 5;
+    auto square = [x]() {
+        return x * x;
+    };
+    int squareResult = square();
+    std::cout << "Square: " << squareResult << std::endl;
+    std::string str = "World";
+    auto appendPrefix = [&str]() {
+        str = "Hello " + str;
+        return str;
+    };
+    std::string modifiedString = appendPrefix();
+    std::cout << "Modified String: " << modifiedString << std::endl;
+    int num = 10;
+    bool flag = true;
+    auto conditionalOperation = [num, flag]() {
+        if (flag) {
+            return num * 2;
+        } else {
+            return num / 2;
+        }
+    };
+    int conditionalResult = conditionalOperation();
+    std::cout << "Conditional Result: " << conditionalResult << std::endl;
+    return 0;
+}
+
+
+TYPE CASTING :
+
+TYPE CASTING
+
+#include<iostream>
+using namespace std;
+main()
+{
+    double a = 21.39;
+    float b = 10.20;
+    int c;
+    c= (int) a;
+    cout<<"Line 1- value of (int)a is :"<<c<<endl;
+    c=(int) b;
+    cout<<"Line 2 -value of (int)b is :"<<c<<endl;
+    return 0;
+}
+
+IMPLICIT
+
+#include<iostream>
+using namespace std;
+int main()
+{
+    int x= 20;
+    int y= 'a';
+    x=x+y;
+    float z=x+y;
+    cout<<"x = "<<x<<endl;
+    cout<<"y = "<<y<<endl;
+    cout<<"z = "<<z<<endl;
+    return 0;
+}
+
+EXPLICITY TYPE CASTING
+
+#include <iostream>
+
+int main()
+{
+    double d=20.5;
+    int a=(int)d+1;
+    std::cout<<a;
+
+    return 0;
+}
+
+CONVERSION USING CAST OPERATOR 
+
+#include <iostream>
+
+int main()
+{
+    float d=20.5;
+    int a=static_cast<int>(d);
+    std::cout<<a;
+
+    return 0;
+}
+
+Another Example
+
+#include <iostream>
+
+int main()
+{
+    const int d=20;
+    int* a=const_cast<int*>(&d);
+    *a=100;
+    std::cout<<d;
+
+    return 0;
+}
+
+another example 
+
+#include <iostream>
+int main()
+{
+    int d=20;
+    float* a=reinterpret_cast<float*>(&d);
+    std::cout<<*a;
+    return 0;
+}    
+
+example 1
+
+#include <iostream>
+using namespace std;
+class Base
+{
+    public:
+    virtual void whoami()
+    {
+        std::cout<<"I am a Base Class object\n";
+    }
+};
+class Derieved :public Base
+{
+    public:
+    void whoami() override
+    {
+        std::cout<< "I am a Derieved class object\n";
+    }
+};
+int main()
+{
+    Base* base_ptr = new Derieved;
+    Derieved* derieved_ptr = dynamic_cast<Derieved*>(base_ptr);
+    if(derieved_ptr != nullptr)
+    {
+        derieved_ptr->whoami();
+    }
+    else
+    {
+        std::cout<<"Case failed:Base object is not actually Derieved\n";
+    }
+    delete base_ptr;
+    return 0;
+} 
+
+Example 2
+
+#include <iostream>
+using namespace std;
+class Base {
+public:
+    virtual void whoami() {
+        std::cout << "I am a Base class object\n";
+    }
+};
+class Derived: public Base {
+public:
+    void whoami() override {
+        std::cout << "I am a Derived class object\n";
+    }
+};
+int main() {
+    double num = 3.14159;
+    int integer_part = static_cast<int>(num);
+    std::cout << "Original number: " << num << std::endl;
+    std::cout << "Integer part: " << integer_part << std::endl;
+    Base* base_ptr = nullptr; 
+
+    Derived* derived_ptr = static_cast<Derived*>(base_ptr);
+    if (dynamic_cast<Derived*>(base_ptr) != nullptr) {
+        derived_ptr = static_cast<Derived*>(base_ptr); 
+        derived_ptr->whoami();
+    } else {
+        std::cout << "Warning: Base object might not be of type Derived\n";
+    }
+    Base* actual_derived_ptr = new Derived;
+    derived_ptr = dynamic_cast<Derived*>(actual_derived_ptr);
+    if (derived_ptr != nullptr) {
+        derived_ptr->whoami(); // Safe to call Derived's whoami
+    } else {
+        std::cout << "Cast failed: base object is not actually Derived\n";
+    }
+    delete actual_derived_ptr;
+    int value = 10;
+    float* float_ptr = reinterpret_cast<float*>(&value); 
+    std::cout << "Interpreted value as float: " << *float_ptr << std::endl; 
+    return 0;
+}
+
+
+10 Practice Questions:
+
+1.Implicit Casting: Write a program that declares an int variable a with the value 10 and a float variable b with the value 3.14. Then, perform the division a / b and print the result. Explain how implicit casting works in this scenario.
+
+#include <iostream>
+int main() {
+    int a = 10;
+    float b = 3.14f;
+    float result = a / b;
+    std::cout << "Result of a / b: " << result << std::endl;
+    return 0;
+}
+
+
+2.Explicit Casting - Data Loss: Declare an int variable x with the value 256 and a char variable y. Assign the value of x to y using explicit casting. Print the value of y.  Discuss the data loss that might occur and how to avoid it if necessary.
+
+#include <iostream>
+int main() {
+    int x = 256;
+    char y = static_cast<char>(x);
+
+    std::cout << "Value of x: " << x << std::endl;
+    std::cout << "Value of y (after casting): " << static_cast<int>(y) << std::endl;
+
+    return 0;
+}
+
+
+3.Explicit Casting - Range Conversion: Declare a double variable d with the value 123.456. Use explicit casting to convert d to an int variable i and print i. Explain the behavior when converting from a larger range to a smaller one.
+
+
+#include <iostream>
+int main() {
+    double d = 123.456;
+    int i = static_cast<int>(d);
+    std::cout << "Value of d: " << d << std::endl;
+    std::cout << "Value of i (after casting): " << i << std::endl;
+
+    return 0;
+}
+
+
+4.Casting Pointers - Same Type: Declare an int variable num and an int pointer ptr initialized with the address of num. Cast ptr to a float pointer fPtr using explicit casting. Is this casting safe? Why or why not?
+
+
+#include <iostream>
+int main() {
+    int num = 42;
+    int* ptr = &num;
+    float* fPtr = reinterpret_cast<float*>(ptr);
+    std::cout << "Value of num: " << num << std::endl;
+    std::cout << "Value at ptr (int*): " << *ptr << std::endl;
+    std::cout << "Value at fPtr (float*): " << *fPtr << std::endl;
+    return 0;
+}
+
+
+5.Casting Pointers - Different Types: Declare an int variable num and a float variable fval. Initialize an int pointer intPtr with the address of num and a float pointer floatPtr with the address of fval. Can you safely cast intPtr to floatPtr? Explain.
+
+#include <iostream>
+int main() {
+    int num = 42;
+    float fval = 3.14;
+    int* intPtr = &num;
+    float* floatPtr = &fval;
+    float* castedFloatPtr = reinterpret_cast<float*>(intPtr);
+    std::cout << "Value of num: " << num << std::endl;
+    std::cout << "Value at intPtr (int*): " << *intPtr << std::endl;
+    std::cout << "Value of fval: " << fval << std::endl;
+    std::cout << "Value at floatPtr (float*): " << *floatPtr << std::endl;
+    std::cout << "Value at castedFloatPtr (float*): " << *castedFloatPtr << std::endl;
+    return 0;
+}
+
+
+6.Casting References - Same Type: Declare an int variable x and an int reference refX assigned to x. Cast refX to a float reference refF. What happens in this case?
+
+
+#include <iostream>
+int main() {
+    int x = 42;
+    int& refX = x;
+    float& refF = reinterpret_cast<float&>(refX);
+    std::cout << "Value of x: " << x << std::endl;
+    std::cout << "Value of refX: " << refX << std::endl;
+    std::cout << "Value of refF: " << refF << std::endl;
+    return 0;
+}
+
+
+7.Casting References - Different Types: Declare an int variable x and a float variable f. Initialize an int reference refX with x. Can you cast refX to refer to f? Why or why not?
+
+
+#include <iostream>
+int main() {
+    int x = 42;
+    float f = 3.14f;
+    int& refX = x;
+    float& refF = f;
+    std::cout << "Value of x: " << x << std::endl;
+    std::cout << "Value of refX: " << refX << std::endl;
+    std::cout << "Value of f: " << f << std::endl;
+    std::cout << "Value of refF: " << refF << std::endl;
+    refF = 6.28f;
+    std::cout << "After modifying refF:" << std::endl;
+    std::cout << "Value of f: " << f << std::endl;
+    return 0;
+}
+
+
+8.Challenge: Area Calculation (Implicit vs. Explicit): Write two functions to calculate the area of a rectangle. One function should take two int arguments for width and height and return an int area. The other function should take two double arguments and return a double area. Discuss the implications of using implicit and explicit casting in these functions.
+
+#include <iostream>
+int calculateArea(int width, int height) {
+    return width * height;
+}
+double calculateArea(double width, double height) {
+    return width * height;
+}
+double calculateArea(int width, double height) {
+    return width * height;
+}
+double calculateArea(double width, int height) {
+    return width * height;
+}
+int main() {
+    int intWidth = 5;
+    int intHeight = 10;
+    int intArea = calculateArea(intWidth, intHeight);
+    std::cout << "Area (int): " << intArea << std::endl;
+    double doubleWidth = 5.5;
+    double doubleHeight = 10.2;
+    double doubleArea = calculateArea(doubleWidth, doubleHeight);
+    std::cout << "Area (double): " << doubleArea << std::endl;
+    double mixedArea = calculateArea(intWidth, doubleHeight);
+    std::cout << "Area (mixed, implicit cast): " << mixedArea << std::endl;
+    int explicitArea = calculateArea(static_cast<int>(doubleWidth), static_cast<int>(doubleHeight));
+    std::cout << "Area (explicit cast): " << explicitArea << std::endl;
+    return 0;
+}
+
+
+9.Challenge: Temperature Conversion (Casting and Rounding): Create a program that takes a temperature in Celsius as input from the user. Use explicit casting and appropriate rounding techniques to convert it to Fahrenheit and print the result.
+
+#include <iostream>
+#include <cmath> 
+int main() {
+    double celsius;
+    std::cout << "Enter temperature in Celsius: ";
+    std::cin >> celsius;
+    double fahrenheit = (celsius * 9.0 / 5.0) + 32.0;
+    int roundedFahrenheit = static_cast<int>(std::round(fahrenheit));
+    std::cout << "Temperature in Fahrenheit (rounded): " << roundedFahrenheit << std::endl;
+    return 0;
+}
+
+10.Challenge: Pointer Arithmetic with Casting (Safe vs. Unsafe): Demonstrate safe and unsafe pointer arithmetic with casting. Explain the potential consequences of unsafe pointer manipulation.
+
+#include <iostream>
+void safePointerArithmetic() {
+    int arr[5] = {10, 20, 30, 40, 50};
+    int *ptr = arr;
+    std::cout << "Safe Pointer Arithmetic:" << std::endl;
+    for (int i = 0; i < 5; ++i) {
+        std::cout << "Value at ptr + " << i << " : " << *(ptr + i) << std::endl;
+    }
+}
+void unsafePointerArithmetic() {
+    int arr[5] = {10, 20, 30, 40, 50};
+    int *ptr = arr;
+    std::cout << "\nUnsafe Pointer Arithmetic:" << std::endl;
+    char *charPtr = reinterpret_cast<char*>(ptr);
+    for (int i = 0; i < 5 * sizeof(int); ++i) {
+        std::cout << "Value at charPtr + " << i << " : " << static_cast<int>(*(charPtr + i)) << std::endl;
+    }
+}
+int main() {
+    safePointerArithmetic();
+    unsafePointerArithmetic();
+    return 0;
+}
+
+VECTOR IN C++ 
+
+#include <iostream>
+#include <vector>
+int main() {
+    std::vector<int> vec;
+    int i;
+    std::cout << "vector size: " << vec.size() << std::endl;
+    for (i = 10; i < 15; i++) {
+        vec.push_back(i);
+    }
+    std::cout << "extended vector size: " << vec.size() << std::endl;
+    for (i = 0; i < 5; i++) {
+        std::cout << "value of vec[" << i << "] - " << vec[i] << std::endl;
+    }
+    std::vector<int>::iterator v = vec.begin();
+    while (v != vec.end()) {
+        std::cout << "value of v: " << *v << std::endl;
+        v++;
+    }
+    return 0;
+}
+
+LIST IN C++
+
+#include <iostream>
+#include <list>
+void showlist(std::list<int> g) {
+    for (std::list<int>::iterator it = g.begin(); it != g.end(); ++it)
+        std::cout << '\t' << *it;
+    std::cout << '\n';
+}
+int main() {
+    std::list<int> golist1, golist2;
+
+    for (int i = 0; i < 10; ++i) {
+        golist1.push_back(12);
+        golist2.push_front(13);
+    }
+    std::cout << "List 1 (golist1) is: ";
+    showlist(golist1);
+    std::cout << "\nList 2 (golist2) is: ";
+    showlist(golist2);
+    std::cout << "\ngolist1.front(): " << golist1.front();
+    std::cout << "\ngolist1.back(): " << golist1.back();
+    std::cout << "\ngolist1.pop_front(): ";
+    golist1.pop_front();
+    showlist(golist1);
+    std::cout << "\ngolist2.pop_back(): ";
+    golist2.pop_back();
+    showlist(golist2);
+    std::cout << "\ngolist1.reverse(): ";
+    golist1.reverse();
+    showlist(golist1);
+    std::cout << "\ngolist2.sort(): ";
+    golist2.sort();
+    showlist(golist2);
+    return 0;
+}
+
+VECTORS USING ARRAY-STYLE
+
+void simple()
+{
+    const int n=10;
+    vector<int>ivec(n);
+    for (int i=0;i<10;++i){
+        cin>>ivec[i];
+    }
+    int ia[n];
+    for(int j=0;j<n;++j)
+    {
+        ia[j]=ivec[j]
+    }
+}
+
+
+write a program that read integer from the user sort them and print the result
+
+#include <iostream>
+#include <vector>
+#include <algorithm> 
+#include <limits>    
+int main() {
+    std::vector<int> numbers;
+    int number;
+    std::cout << "Enter integers (type 'q' to finish):" << std::endl;
+    while (std::cin >> number) {
+        numbers.push_back(number);
+    }
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::sort(numbers.begin(), numbers.end());
+    std::cout << "Sorted integers:" << std::endl;
+    for (int num : numbers) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+    return 0;
+}
+
+
+
+
