@@ -1,0 +1,422 @@
+Example 1 :
+
+#include <iostream>
+#include <vector>
+
+int main() {
+    std::vector<int> vec;
+    vec.push_back(2);
+    vec.push_back(3);
+    vec.push_back(4);
+
+    // Multiplying the first three elements of the vector
+    int product = vec[0] * vec[1] * vec[2];
+
+    std::cout << "Vector elements: ";
+    for (int i = 0; i < vec.size(); ++i) {
+        std::cout << vec[i] << " ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "Product of the first three elements: " << product << std::endl;
+
+    return 0;
+}
+
+Example 2 :
+
+#include <iostream>  
+#include <vector>  
+
+using namespace std;
+
+int main() {  
+    vector<char> v{'a', 'e', 'i', 'o', 'u'};  
+    vector<char>::iterator itr;  
+    
+    // Use a for loop to iterate through the vector
+    for (itr = v.begin(); itr != v.end(); ++itr) {  
+        cout << *itr << " ";  // Print each element followed by a space
+    }  
+    
+    cout << endl; // Print a newline at the end
+    return 0;  
+}
+
+EXAMPLE 3 :
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    vector<char> v{'a', 'e', 'i', 'o', 'u'};
+    vector<char>::reverse_iterator rit;
+
+    // Use a for loop to iterate through the vector in reverse
+    for (rit = v.rbegin(); rit != v.rend(); ++rit) {
+        cout << *rit << " ";  // Print each element followed by a space
+}
+
+EXAMPLE 4 :
+
+#include <iostream>
+#include <queue>
+
+using namespace std;
+
+int main() {
+    // Create an empty queue
+    queue<int> myqueue;
+
+    // Push elements into the queue
+    myqueue.push(0);
+    myqueue.push(1);
+    myqueue.push(2);
+
+    // Print the content of the queue
+    cout << "Elements in the queue: ";
+    while (!myqueue.empty()) {
+        cout << myqueue.front() << " "; // Print the front element
+        myqueue.pop(); // Remove the front element
+    }
+    cout << endl;
+
+    return 0;
+}
+
+EXAMPLE 5 :
+
+#include <iostream>
+#include <queue>
+
+using namespace std;
+
+int main() {
+    // Create an empty queue
+    queue<int> myqueue;
+
+    // Push elements into the queue
+    myqueue.push(0);
+    myqueue.push(1);
+    myqueue.push(2);
+
+    // Remove the first two elements from the queue
+    myqueue.pop();
+    myqueue.pop();
+
+    // Print the remaining element in the queue
+    cout << "Remaining element in the queue: ";
+    if (!myqueue.empty()) {
+        cout << myqueue.front() << endl;
+        myqueue.pop();
+    }
+
+    return 0;
+}
+
+EXAMPLE 6 :
+
+#include <iostream>
+#include <stack>
+using namespace std;
+
+void showstack(stack<int> s) {
+    while (!s.empty()) {
+        cout << '\t' << s.top();
+        s.pop();
+    }
+    cout << '\n';
+}
+
+int main() {
+    stack<int> s;
+
+    // Pushing elements into the stack
+    s.push(10);
+    s.push(30);
+    s.push(20);
+    s.push(5);
+    s.push(1);
+
+    cout << "The stack is: ";
+    showstack(s);
+
+    // Displaying stack properties
+    cout << "\ns.size(): " << s.size();
+    cout << "\ns.top(): " << s.top();
+
+    cout << "\ns.pop(): ";
+    s.pop();
+    showstack(s);
+
+    return 0;
+}
+
+EXAMPLE 7 :
+
+#include <iostream>
+#include <stack>
+#include <cassert>
+
+using namespace std;
+
+class MaxStack {
+private:
+    stack<int> mainStack; // Stack to store the main elements
+    stack<int> maxStack;  // Stack to store the maximum elements
+
+public:
+    // Push element onto the stack
+    void push(int x) {
+        mainStack.push(x);
+
+        // If maxStack is empty or x is greater than or equal to the top of maxStack, push x onto maxStack
+        if (maxStack.empty() || x >= maxStack.top()) {
+            maxStack.push(x);
+        }
+    }
+
+    // Pop element from the stack
+    void pop() {
+        // Ensure the stack is not empty before popping
+        assert(!mainStack.empty());
+
+        // If the top of mainStack is the same as the top of maxStack, pop from maxStack as well
+        if (mainStack.top() == maxStack.top()) {
+            maxStack.pop();
+        }
+        mainStack.pop();
+    }
+
+    // Get the top element of the stack
+    int top() {
+        // Ensure the stack is not empty before accessing the top element
+        assert(!mainStack.empty());
+        return mainStack.top();
+    }
+
+    // Retrieve the maximum element in the stack
+    int getMax() {
+        // Ensure maxStack is not empty before retrieving the maximum element
+        assert(!maxStack.empty());
+        return maxStack.top();
+    }
+
+    // Check if the stack is empty
+    bool empty() {
+        return mainStack.empty();
+    }
+};
+
+int main() {
+    MaxStack s;
+
+    s.push(3);
+    s.push(5);
+    cout << "Current max: " << s.getMax() << endl; // 5
+
+    s.push(2);
+    s.push(1);
+    cout << "Current max: " << s.getMax() << endl; // 5
+
+    s.push(6);
+    cout << "Current max: " << s.getMax() << endl; // 6
+
+    s.pop();
+    cout << "Current max: " << s.getMax() << endl; // 5
+
+    s.pop();
+    cout << "Current max: " << s.getMax() << endl; // 5
+
+    s.pop();
+    cout << "Current max: " << s.getMax() << endl; // 5
+
+    s.pop();
+    cout << "Current max: " << s.getMax() << endl; // 3
+
+    s.pop();
+    // No more elements in the stack
+    cout << "Stack empty: " << s.empty() << endl;
+
+    return 0;
+}
+
+EXAMPLE 8 :
+
+#include <iostream>
+using namespace std;
+
+class CircularQueue {
+private:
+    int *queue;
+    int front, rear, capacity, size;
+
+public:
+    // Constructor to initialize the queue
+    CircularQueue(int cap) {
+        capacity = cap;
+        queue = new int[capacity];
+        front = -1;
+        rear = -1;
+        size = 0;
+    }
+
+    // Destructor to free the allocated memory
+    ~CircularQueue() {
+        delete[] queue;
+    }
+
+    // Enqueue operation to add an element to the queue
+    bool enqueue(int value) {
+        if (isFull()) {
+            cout << "Queue is full" << endl;
+            return false;
+        }
+
+        if (isEmpty()) {
+            front = 0;
+        }
+
+        rear = (rear + 1) % capacity;
+        queue[rear] = value;
+        size++;
+        return true;
+    }
+
+    // Dequeue operation to remove an element from the queue
+    bool dequeue() {
+        if (isEmpty()) {
+            cout << "Queue is empty" << endl;
+            return false;
+        }
+
+        if (front == rear) {
+            front = -1;
+            rear = -1;
+        } else {
+            front = (front + 1) % capacity;
+        }
+        size--;
+        return true;
+    }
+
+    // Get the front element of the queue
+    int getFront() {
+        if (isEmpty()) {
+            cout << "Queue is empty" << endl;
+            return -1;
+        }
+        return queue[front];
+    }
+
+    // Check if the queue is empty
+    bool isEmpty() {
+        return size == 0;
+    }
+
+    // Check if the queue is full
+    bool isFull() {
+        return size == capacity;
+    }
+
+    // Get the current size of the queue
+    int getSize() {
+        return size;
+    }
+};
+
+int main() {
+    CircularQueue q(5); // Create a queue with capacity 5
+
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+    q.enqueue(40);
+    q.enqueue(50);
+
+    cout << "Front element: " << q.getFront() << endl; // 10
+
+    q.dequeue();
+    cout << "Front element after dequeue: " << q.getFront() << endl; // 20
+
+    q.enqueue(60);
+    cout << "Front element after enqueue: " << q.getFront() << endl; // 20
+
+    // Dequeue all elements
+    while (!q.isEmpty()) {
+        cout << "Dequeued: " << q.getFront() << endl;
+        q.dequeue();
+    }
+
+    return 0;
+}
+
+Example 9 :
+
+#include <iostream>
+#include <stack>
+
+using namespace std;
+
+// Function to insert an element in sorted order into a stack
+void sortedInsert(stack<int>& s, int element) {
+    // Base case: If stack is empty or the element to be inserted is greater than the top element
+    if (s.empty() || element > s.top()) {
+        s.push(element);
+    } else {
+        // Remove the top element and recurse
+        int top = s.top();
+        s.pop();
+        sortedInsert(s, element);
+        
+        // Push the top element back
+        s.push(top);
+    }
+}
+
+// Function to sort the stack
+void sortStack(stack<int>& s) {
+    // Base case: If stack is not empty
+    if (!s.empty()) {
+        // Remove the top element
+        int top = s.top();
+        s.pop();
+        
+        // Sort the remaining stack
+        sortStack(s);
+        
+        // Insert the top element back in sorted order
+        sortedInsert(s, top);
+    }
+}
+
+// Function to print the elements of the stack
+void printStack(stack<int> s) {
+    while (!s.empty()) {
+        cout << s.top() << " ";
+        s.pop();
+    }
+    cout << endl;
+}
+
+int main() {
+    stack<int> s;
+    s.push(30);
+    s.push(10);
+    s.push(20);
+    s.push(5);
+    s.push(40);
+
+    cout << "Original stack: ";
+    printStack(s);
+
+    // Sort the stack
+    sortStack(s);
+
+    cout << "Sorted stack: ";
+    printStack(s);
+
+    return 0;
+}
