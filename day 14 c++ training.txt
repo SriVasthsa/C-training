@@ -1,0 +1,1016 @@
+Example 1 :
+
+#include <iostream>
+#include <list>
+#include <algorithm>
+void display(const std::list<int>& lst) {
+    for (int num : lst) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+}
+int main() {
+    std::list<int> lst;
+    lst.push_front(10);
+    lst.push_front(20);
+    lst.push_back(30);
+    lst.push_back(40);
+    std::cout << "List after inserting elements at front and back: ";
+    display(lst);
+    lst.pop_front();
+    lst.pop_back();
+    std::cout << "List after removing elements from front and back: ";
+    display(lst);
+    lst.sort();
+    std::cout << "List sorted in ascending order: ";
+    display(lst);
+    lst.sort(std::greater<int>());
+
+    std::cout << "List sorted in descending order: ";
+    display(lst);
+    lst.reverse();
+
+    std::cout << "List after reversing: ";
+    display(lst);
+    return 0;
+}
+
+Example 2 :
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <numeric>
+void displayVector(const std::vector<float>& vec) {
+    for (float num : vec) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+}
+int main() {
+    std::vector<float> vec;
+    vec.push_back(1.1);
+    vec.push_back(2.2);
+    vec.push_back(3.3);
+    vec.push_back(4.4);
+    vec.push_back(5.5);
+    std::cout << "Vector after adding elements: ";
+    displayVector(vec);
+    int position = 2;
+    if (position < vec.size()) {
+        vec.erase(vec.begin() + position);
+    }
+    std::cout << "Vector after removing element at position " << position << ": ";
+    displayVector(vec);
+    auto maxElement = std::max_element(vec.begin(), vec.end());
+    auto minElement = std::min_element(vec.begin(), vec.end());
+    if (maxElement != vec.end() && minElement != vec.end()) {
+        std::cout << "Maximum element: " << *maxElement << std::endl;
+        std::cout << "Minimum element: " << *minElement << std::endl;
+    }
+    float sum = std::accumulate(vec.begin(), vec.end(), 0.0f);
+    float average = sum / vec.size();
+    std::cout << "Average of the elements: " << average << std::endl;
+    std::cout << "Final vector elements: ";
+    displayVector(vec);
+    return 0;
+}
+
+Example 3 :
+
+#include <iostream>
+#include <queue>
+#include <string>
+void displayQueue(std::queue<std::string> q) {
+    std::cout << "Current queue: ";
+    while (!q.empty()) {
+        std::cout << q.front() << " ";
+        q.pop();
+    }
+    std::cout << std::endl;
+}
+int main() {
+    std::queue<std::string> ticketQueue;
+    int customersServed = 0;
+    ticketQueue.push("Customer1");
+    ticketQueue.push("Customer2");
+    ticketQueue.push("Customer3");
+    ticketQueue.push("Customer4");
+    std::cout << "After adding customers: ";
+    displayQueue(ticketQueue);
+    while (!ticketQueue.empty()) {
+        std::cout << ticketQueue.front() << " is being served." << std::endl;
+        ticketQueue.pop();
+        customersServed++;
+    }
+    std::cout << "After serving all customers: ";
+    displayQueue(ticketQueue);
+    std::cout << "Number of customers served: " << customersServed << std::endl;
+    return 0;
+}
+
+Example 4 :
+
+#include <iostream>
+#include <stack>
+#include <sstream>
+#include <string>
+#include <cctype>
+float evaluatePostfix(const std::string& expression) {
+    std::stack<float> stack;
+    std::istringstream tokens(expression);
+    std::string token;
+    while (tokens >> token) {
+        if (std::isdigit(token[0])) {
+            stack.push(std::stof(token));
+        } else {
+            float operand2 = stack.top(); stack.pop();
+            float operand1 = stack.top(); stack.pop();
+            switch (token[0]) {
+                case '+': stack.push(operand1 + operand2); break;
+                case '-': stack.push(operand1 - operand2); break;
+                case '*': stack.push(operand1 * operand2); break;
+                case '/': stack.push(operand1 / operand2); break;
+                default:
+                    throw std::invalid_argument("Invalid operator encountered");
+            }
+        }
+    }
+    return stack.top();
+}
+int main() {
+    std::string postfixExpression;
+    std::cout << "Enter a postfix expression (e.g., '3 4 + 2 * 7 /'): ";
+    std::getline(std::cin, postfixExpression);
+
+    try {
+        float result = evaluatePostfix(postfixExpression);
+        std::cout << "The result of the evaluation is: " << result << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+    return 0;
+}
+
+-----------------------------
+
+Example 1 :
+
+#include <iostream>
+#include <vector>
+#include <memory>
+#include <cmath>
+class Shape {
+public:
+    virtual double area() const = 0;  
+    virtual double perimeter() const = 0;  
+    virtual ~Shape() = default;
+};
+class Rectangle : public Shape {
+private:
+    double length;
+    double width;
+public:
+    Rectangle(double l, double w) : length(l), width(w) {}
+
+    double area() const override {
+        return length * width;
+    }
+    double perimeter() const override {
+        return 2 * (length + width);
+    }
+};
+class Circle : public Shape {
+private:
+    double radius;
+public:
+    Circle(double r) : radius(r) {}
+
+    double area() const override {
+        return M_PI * radius * radius;
+    }
+
+    double perimeter() const override {
+        return 2 * M_PI * radius;
+    }
+};
+int main() {
+    std::vector<std::unique_ptr<Shape>> shapes;
+    shapes.push_back(std::unique_ptr<Shape>(new Rectangle(4.0, 5.0)));
+    shapes.push_back(std::unique_ptr<Shape>(new Circle(3.0)));
+    for (const auto& shape : shapes) {
+        std::cout << "Area: " << shape->area() << std::endl;
+        std::cout << "Perimeter: " << shape->perimeter() << std::endl;
+    }
+    return 0;
+}
+
+
+Example 2 :
+
+#include <iostream>
+#include <vector>
+#include <memory>
+#include <cmath>
+class Shape {
+public:
+    Shape() {
+        std::cout << "Shape created.\n";
+    }
+        virtual double area() const = 0;  
+    virtual double circumference() const = 0;  
+    virtual void display() const = 0;  
+    virtual ~Shape() {
+        std::cout << "Shape destroyed.\n";
+    }  
+};
+class Rectangle : public Shape {
+private:
+    double length;
+    double width;
+public:
+    Rectangle() : length(0), width(0) {
+        std::cout << "Rectangle created with default constructor.\n";
+    }
+    Rectangle(double l, double w) : length(l), width(w) {
+        std::cout << "Rectangle created with length and width.\n";
+    }
+    double area() const override {
+        return length * width;
+    }
+    double circumference() const override {
+        return 2 * (length + width);
+    }
+    void display() const override {
+        std::cout << "Rectangle: length = " << length << ", width = " << width
+                  << ", area = " << area() << ", circumference = " << circumference() << std::endl;
+    }
+    ~Rectangle() {
+        std::cout << "Rectangle destroyed.\n";
+    }
+};
+class Circle : public Shape {
+private:
+    double radius;
+public:
+    Circle() : radius(0) {
+        std::cout << "Circle created with default constructor.\n";
+    }
+    Circle(double r) : radius(r) {
+        std::cout << "Circle created with radius.\n";
+    }
+    double area() const override {
+        return M_PI * radius * radius;
+    }
+    double circumference() const override {
+        return 2 * M_PI * radius;
+    }
+    void display() const override {
+        std::cout << "Circle: radius = " << radius << ", area = " << area()
+                  << ", circumference = " << circumference() << std::endl;
+    }
+    ~Circle() {
+        std::cout << "Circle destroyed.\n";
+    }
+};
+int main() {
+    std::vector<std::unique_ptr<Shape>> shapes;
+    shapes.push_back(std::unique_ptr<Shape>(new Rectangle(6.0, 3.0)));
+    shapes.push_back(std::unique_ptr<Shape>(new Circle(4.0)));
+    for (const auto& shape : shapes) {
+        shape->display();
+    }
+    return 0;
+}
+
+Example 3 :
+
+#include <iostream>
+#include <vector>
+#include <memory>
+#include <cmath>
+class Shape {
+public:
+    Shape() {
+        std::cout << "Shape base class initialized.\n";
+    }
+    virtual double area() const = 0; 
+    virtual double circumference() const = 0; 
+    virtual void display() const = 0;  
+    virtual ~Shape() {
+        std::cout << "Shape base class destroyed.\n";
+    } 
+    bool operator>(const Shape& other) const {
+        return this->area() > other.area();
+    }
+};
+class Rectangle : public Shape {
+private:
+    double length;
+    double width;
+public:
+    Rectangle() : length(1.0), width(1.0) {
+        std::cout << "Rectangle created with default dimensions 1x1.\n";
+    }
+    Rectangle(double l, double w) : length(l), width(w) {
+        std::cout << "Rectangle created with dimensions " << l << "x" << w << ".\n";
+    }
+    double area() const override {
+        return length * width;
+    }
+    double circumference() const override {
+        return 2 * (length + width);
+    }
+    void display() const override {
+        std::cout << "Rectangle: length = " << length << ", width = " << width
+                  << ", area = " << area() << ", circumference = " << circumference() << std::endl;
+    }
+    ~Rectangle() {
+        std::cout << "Rectangle with dimensions " << length << "x" << width << " destroyed.\n";
+    }
+};
+class Circle : public Shape {
+private:
+    double radius;
+public:
+    Circle() : radius(1.0) {
+        std::cout << "Circle created with default radius 1.\n";
+    }
+    Circle(double r) : radius(r) {
+        std::cout << "Circle created with radius " << r << ".\n";
+    }
+    double area() const override {
+        return M_PI * radius * radius;
+    }
+    double circumference() const override {
+        return 2 * M_PI * radius;
+    }
+    void display() const override {
+        std::cout << "Circle: radius = " << radius << ", area = " << area()
+                  << ", circumference = " << circumference() << std::endl;
+    }
+    ~Circle() {
+        std::cout << "Circle with radius " << radius << " destroyed.\n";
+    }
+};
+int main() {
+    std::vector<std::unique_ptr<Shape>> shapes;
+    shapes.push_back(std::unique_ptr<Shape>(new Rectangle()));
+    shapes.push_back(std::unique_ptr<Shape>(new Rectangle(6.0, 3.0)));
+    shapes.push_back(std::unique_ptr<Shape>(new Circle()));
+    shapes.push_back(std::unique_ptr<Shape>(new Circle(4.0)));
+    for (const auto& shape : shapes) {
+        shape->display();
+    }
+    if (*shapes[1] > *shapes[3]) {
+        std::cout << "The area of the rectangle is greater than the area of the circle.\n";
+    } else {
+        std::cout << "The area of the circle is greater than or equal to the area of the rectangle.\n";
+    }
+    return 0;
+}
+
+Example 4 :
+
+#include <iostream>
+#include <vector>
+#include <memory>
+#include <cmath>
+class Shape {
+public:
+    Shape() {
+        std::cout << "Shape base class constructed.\n";
+    }
+    virtual double area() const = 0;  
+    virtual double circumference() const = 0;  
+    virtual void display() const = 0;  
+    virtual ~Shape() {
+        std::cout << "Shape base class destructed.\n";
+    }
+    bool operator==(const Shape& other) const {
+        return this->area() == other.area();
+    }
+    virtual Shape& operator+(const Shape& other) {
+        throw std::logic_error("Operator + is not defined for these shapes.");
+    }
+};
+class Rectangle : public Shape {
+private:
+    double length;
+    double width;
+public:
+    Rectangle() : length(1.0), width(1.0) {
+        std::cout << "Rectangle created with default dimensions 1x1.\n";
+    }
+    Rectangle(double l, double w) : length(l), width(w) {
+        std::cout << "Rectangle created with dimensions " << l << "x" << w << ".\n";
+    }
+    double area() const override {
+        return length * width;
+    }
+    double circumference() const override {
+        return 2 * (length + width);
+    }
+    void display() const override {
+        std::cout << "Rectangle: length = " << length << ", width = " << width
+                  << ", area = " << area() << ", circumference = " << circumference() << std::endl;
+    }
+    double getLength() const {
+        return length;
+    }
+    double getWidth() const {
+        return width;
+    }
+    Rectangle& operator+(const Shape& other) override {
+        const Rectangle& otherRect = dynamic_cast<const Rectangle&>(other);
+        double newLength = this->length + otherRect.length;
+        double newWidth = this->width + otherRect.width;
+        return *(new Rectangle(newLength, newWidth));
+    }
+    ~Rectangle() {
+        std::cout << "Rectangle with dimensions " << length << "x" << width << " destroyed.\n";
+    }
+};
+class Circle : public Shape {
+private:
+    double radius;
+public:
+    Circle() : radius(1.0) {
+        std::cout << "Circle created with default radius 1.\n";
+    }
+    Circle(double r) : radius(r) {
+        std::cout << "Circle created with radius " << r << ".\n";
+    }
+    double area() const override {
+        return M_PI * radius * radius;
+    }
+    double circumference() const override {
+        return 2 * M_PI * radius;
+    }
+    void display() const override {
+        std::cout << "Circle: radius = " << radius << ", area = " << area()
+                  << ", circumference = " << circumference() << std::endl;
+    }
+    ~Circle() {
+        std::cout << "Circle with radius " << radius << " destroyed.\n";
+    }
+};
+int main() {
+    std::vector<std::unique_ptr<Shape>> shapes;
+    shapes.push_back(std::unique_ptr<Shape>(new Rectangle()));
+    shapes.push_back(std::unique_ptr<Shape>(new Rectangle(6.0, 3.0)));
+    shapes.push_back(std::unique_ptr<Shape>(new Circle()));
+    shapes.push_back(std::unique_ptr<Shape>(new Circle(4.0)));
+    for (const auto& shape : shapes) {
+        shape->display();
+    }
+    if (*shapes[0] == *shapes[1]) {
+        std::cout << "The areas of the two rectangles are equal.\n";
+    } else {
+        std::cout << "The areas of the two rectangles are not equal.\n";
+    }
+    try {
+        Rectangle combinedRect = dynamic_cast<Rectangle&>(*shapes[0] + *shapes[1]);
+        std::cout << "Combined rectangle dimensions: length = " << combinedRect.getLength() << ", width = " << combinedRect.getWidth() << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Exception caught: " << e.what() << std::endl;
+    }
+    return 0;
+}
+
+
+Example 5 :
+
+#include <iostream>
+#include <cmath>
+class Shape;
+double totalArea(const Shape* shapes[], int size);
+class Shape {
+public:
+    virtual double area() const = 0;  
+    virtual ~Shape() = default;  
+    friend double totalArea(const Shape* shapes[], int size); 
+};
+class Rectangle : public Shape {
+private:
+    double length;
+    double width;
+public:
+    Rectangle(double l, double w) : length(l), width(w) {}
+
+    double area() const override {
+        return length * width;
+    }
+};
+class Circle : public Shape {
+private:
+    double radius;
+public:
+    Circle(double r) : radius(r) {}
+
+    double area() const override {
+        return M_PI * radius * radius;
+    }
+};
+double totalArea(const Shape* shapes[], int size) {
+    double total = 0.0;
+    for (int i = 0; i < size; ++i) {
+        total += shapes[i]->area();
+    }
+    return total;
+}
+int main() {
+    const int numShapes = 4;
+    Shape* shapes[numShapes] = {
+        new Rectangle(6.0, 3.0),
+        new Rectangle(4.0, 2.0),
+        new Circle(4.0),
+        new Circle(3.0)
+    };
+    const Shape* constShapes[numShapes];
+    for (int i = 0; i < numShapes; ++i) {
+        constShapes[i] = shapes[i];
+    }
+    double total = totalArea(constShapes, numShapes);
+    std::cout << "Total area of all shapes: " << total << std::endl;
+    for (int i = 0; i < numShapes; ++i) {
+        delete shapes[i];
+    }
+    return 0;
+}
+
+
+Example 6 :
+
+#include <iostream>
+#include <cmath>
+template<typename T>
+class Point {
+private:
+    T x;
+    T y;
+public:
+    Point() : x(0), y(0) {}
+    Point(T x, T y) : x(x), y(y) {}
+    T getX() const { return x; }
+    T getY() const { return y; }
+    void setX(T newX) { x = newX; }
+    void setY(T newY) { y = newY; }
+    void display() const {
+        std::cout << "(" << x << ", " << y << ")";
+    }
+};
+class Shape {
+public:
+    virtual double area() const = 0;  
+    virtual ~Shape() = default;  
+};
+template<typename T>
+class Rectangle : public Shape {
+private:
+    T length;
+    T width;
+    Point<T> origin;  
+
+public:
+    Rectangle(T l, T w, const Point<T>& o) : length(l), width(w), origin(o) {}
+
+    double area() const override {
+        return length * width;
+    }
+    void display() const {
+        std::cout << "Rectangle: length = " << length << ", width = " << width
+                  << ", origin = ";
+        origin.display();
+        std::cout << ", area = " << area() << std::endl;
+    }
+};
+template<typename T>
+class Circle : public Shape {
+private:
+    T radius;
+    Point<T> center;  
+
+public:
+    Circle(T r, const Point<T>& c) : radius(r), center(c) {}
+
+    double area() const override {
+        return M_PI * radius * radius;
+    }
+    void display() const {
+        std::cout << "Circle: radius = " << radius
+                  << ", center = ";
+        center.display();
+        std::cout << ", area = " << area() << std::endl;
+    }
+};
+int main() {
+    Point<int> rectOrigin(1, 1);
+    Rectangle<int> rect(5, 3, rectOrigin);
+
+    Point<double> circleCenter(0.0, 0.0);
+    Circle<double> circle(4.0, circleCenter);
+    rect.display();
+    circle.display();
+    return 0;
+}
+
+Example 7 :
+
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <memory>
+#include <string>
+using namespace std;
+class Shape {
+protected:
+    string name;
+public:
+    Shape(const string& name) : name(name) {}
+    virtual ~Shape() {
+        cout << name << " destructor called" << endl;
+    }
+    virtual double area() const = 0;
+    virtual void print() const {
+        cout << "Shape: " << name << endl;
+    }
+    friend double totalArea(const vector<shared_ptr<Shape>>& shapes);
+    friend bool operator==(const Shape& lhs, const Shape& rhs) {
+        return lhs.area() == rhs.area();
+    }
+};
+class Rectangle : public Shape {
+private:
+    double width, height;
+public:
+    Rectangle(double w, double h) : Shape("Rectangle"), width(w), height(h) {
+        cout << "Rectangle constructor called" << endl;
+    }
+    ~Rectangle() {
+        cout << "Rectangle destructor called" << endl;
+    }
+    double area() const override {
+        return width * height;
+    }
+    void print() const override {
+        cout << "Rectangle(width: " << width << ", height: " << height << ")" << endl;
+    }
+    friend bool operator==(const Rectangle& lhs, const Rectangle& rhs) {
+        return lhs.width == rhs.width && lhs.height == rhs.height;
+    }
+};
+class Circle : public Shape {
+private:
+    double radius;
+public:
+    Circle(double r) : Shape("Circle"), radius(r) {
+        cout << "Circle constructor called" << endl;
+    }
+    ~Circle() {
+        cout << "Circle destructor called" << endl;
+    }
+    double area() const override {
+        return M_PI * radius * radius;
+    }
+    void print() const override {
+        cout << "Circle(radius: " << radius << ")" << endl;
+    }
+    friend bool operator==(const Circle& lhs, const Circle& rhs) {
+        return lhs.radius == rhs.radius;
+    }
+};
+double totalArea(const vector<shared_ptr<Shape>>& shapes) {
+    double total = 0.0;
+    for (const auto& shape : shapes) {
+        total += shape->area();
+    }
+    return total;
+}
+template <typename T>
+class Point {
+private:
+    T x, y;
+public:
+    Point(T x, T y) : x(x), y(y) {}
+    T getX() const { return x; }
+    T getY() const { return y; }
+    void setX(T x) { this->x = x; }
+    void setY(T y) { this->y = y; }
+    void print() const {
+        cout << "Point(" << x << ", " << y << ")" << endl;
+    }
+};
+int main() {
+    vector<shared_ptr<Shape>> shapes;
+    shapes.push_back(make_shared<Rectangle>(3.0, 4.0));
+    shapes.push_back(make_shared<Circle>(5.0));
+    for (const auto& shape : shapes) {
+        shape->print();
+        cout << "Area: " << shape->area() << endl;
+    }
+    cout << "Total area: " << totalArea(shapes) << endl;
+    Rectangle rect1(3.0, 4.0);
+    Rectangle rect2(3.0, 4.0);
+    Circle circ1(5.0);
+    Circle circ2(5.0);
+    cout << "rect1 == rect2: " << (rect1 == rect2) << endl;
+    cout << "circ1 == circ2: " << (circ1 == circ2) << endl;
+    Point<int> p1(1, 2);
+    Point<double> p2(3.5, 4.5);
+    p1.print();
+    p2.print();
+    return 0;
+}
+
+
+Example 8 :
+
+
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <memory>
+using namespace std;
+class Shape {
+protected:
+    string name;
+public:
+    Shape(const string& name) : name(name) {}
+    virtual ~Shape() {
+        cout << name << " destructor called" << endl;
+    }
+    virtual double area() const = 0;
+    virtual void print() const {
+        cout << "Shape: " << name << endl;
+    }
+    friend bool operator==(const Shape& lhs, const Shape& rhs) {
+        return lhs.area() == rhs.area();
+    }
+    friend double totalArea(const vector<shared_ptr<Shape>>& shapes);
+};
+class Rectangle : public Shape {
+private:
+    double width, height;
+public:
+    Rectangle(double w, double h) : Shape("Rectangle"), width(w), height(h) {
+        cout << "Rectangle constructor called" << endl;
+    }
+    double area() const override {
+        return width * height;
+    }
+    void print() const override {
+        cout << "Rectangle(width: " << width << ", height: " << height << ")" << endl;
+    }
+    friend bool operator==(const Rectangle& lhs, const Rectangle& rhs) {
+        return lhs.width == rhs.width && lhs.height == rhs.height;
+    }
+};
+class Circle : public Shape {
+private:
+    double radius;
+public:
+    Circle(double r) : Shape("Circle"), radius(r) {
+        cout << "Circle constructor called" << endl;
+    }
+    double area() const override {
+        return M_PI * radius * radius;
+    }
+    void print() const override {
+        cout << "Circle(radius: " << radius << ")" << endl;
+    }
+    friend bool operator==(const Circle& lhs, const Circle& rhs) {
+        return lhs.radius == rhs.radius;
+    }
+};
+double totalArea(const vector<shared_ptr<Shape>>& shapes) {
+    double total = 0.0;
+    for (const auto& shape : shapes) {
+        total += shape->area();
+    }
+    return total;
+}
+int main() {
+    vector<shared_ptr<Shape>> shapes;
+    shapes.push_back(make_shared<Rectangle>(3.0, 4.0));
+    shapes.push_back(make_shared<Circle>(5.0));
+
+    for (const auto& shape : shapes) {
+        shape->print();
+        cout << "Area: " << shape->area() << endl;
+    }
+    cout << "Total area: " << totalArea(shapes) << endl;
+    Rectangle rect1(3.0, 4.0);
+    Rectangle rect2(3.0, 4.0);
+    Circle circ1(5.0);
+    Circle circ2(5.0);
+    cout << "rect1 == rect2: " << (rect1 == rect2) << endl;
+    cout << "circ1 == circ2: " << (circ1 == circ2) << endl;
+    return 0;
+}
+
+
+----------------------------------------
+
+problem 1 :
+
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+int main() {
+    std::ifstream inputFile("input.txt");
+    if (!inputFile) {
+        std::cerr << "Error opening file." << std::endl;
+        return 1;
+    }
+    std::string line;
+    while (std::getline(inputFile, line)) {
+        std::cout << line << std::endl;
+    }
+    inputFile.close();
+    return 0;
+}
+To use the ifstream class in C++ to open a file for reading. std::ifstream inputFile("input.txt"); is one example.
+ In C++, reading from files is done via the ifstream class. It offers a file stream input interface for operations.
+ It can use the operator! or fail() method of the ifstream object to determine whether a file was successfully opened. 
+if (!inputFile) or if (inputFile.fail()), for instance. The std::getline function is used to read a line from a file. 
+std::getline(inputFile, line); is one example. 
+After reading a file, it calls the close function on the ifstream object to close it correctly. Take inputFile.close(); as an example.
+
+
+problem 2 :
+
+*CODE:
+#include <iostream>
+#include <fstream>
+#include <string>
+int main() {
+    // Open a file for writing
+    std::ofstream outputFile("output.txt");
+    // Check if the file was successfully opened
+    if (!outputFile) {
+        std::cerr << "Error opening file for writing." << std::endl;
+        return 1;
+    }
+    // Write lines to the file
+    outputFile << "Hello, world!" << std::endl;
+    outputFile << "This is a test file." << std::endl;
+    // Properly close the file after writing
+    outputFile.close();
+    return 0;
+}
+Use the ofstream class in C++ to open a file for writing. std::ofstream outputFile("output.txt"); is one example.
+Writing to files in C++ is done via the ofstream class. It offers a file stream output interface for operations.
+can check the operator! or fail() method of the ofstream object to handle failures in the event that the file cannot be opened for writing.
+ if (!outputFile) or if (outputFile.fail()), for instance.
+In C++, you use the \\ operator with the ofstream object to write a string to a file. 
+Take outputFile \\ "Hello, world!" \\ std::endl; as an example.
+It's crucial to close a file after writing to it in order to ensure that resources are released, 
+all data is correctly flushed from the buffer to the file, and no data corruption happens. 
+It also opens the file for access by other processes or applications.
+
+problem 3 :
+
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+int main() {
+    std::ofstream logFile("log.txt", std::ios_base::app);
+    if (!logFile) {
+        std::cerr << "Error opening file for appending." << std::endl;
+        return 1;
+    }
+    logFile << "New log entry." << std::endl;
+    logFile.close();
+    return 0;
+}
+1. Use the ofstream class in C++ to open a file for appending 
+while in the std::ios_base::app mode. std::ofstream logFile("log.txt", std::ios_base::app); is one example.
+2.When a file is opened in write mode (std::ios_base::out), any existing file will be truncated, meaning its contents will be removed.
+ If a file is opened in append mode (std::ios_base::app), 
+it will create it if it doesn't already exist, preserve its contents, and append new data at the end.
+3. Users must open a file in the std::ios_base::app mode in order to append data to it using the ofstream class. 
+std::ofstream logFile("log.txt", std::ios_base::app); is one example.
+4. The file will be created if it doesn't already exist when you try to open it in add mode.
+5. Use file locks or other synchronization techniques as an option if more than one process or thread is accessing the file at once.
+ Address any mistakes that can arise when operating on the file.
+
+
+problem 4 :
+
+#include <iostream>
+#include <fstream>
+#include <string>
+
+int main() {
+    // Open source file for reading
+    std::ifstream sourceFile("source.txt");
+    if (!sourceFile.is_open()) {
+        std::cerr << "Failed to open source file." << std::endl;
+        return 1;
+    }
+
+    // Open destination file for writing
+    std::ofstream destFile("destination.txt");
+    if (!destFile.is_open()) {
+        std::cerr << "Failed to open destination file." << std::endl;
+        sourceFile.close(); // Close source file before returning
+        return 1;
+    }
+
+    // Copy contents from source to destination
+    std::string line;
+    while (std::getline(sourceFile, line)) {
+        destFile << line << std::endl;
+    }
+
+    // Check for errors during reading or writing
+    if (sourceFile.bad()) {
+        std::cerr << "Error reading from source file." << std::endl;
+    }
+    if (destFile.bad()) {
+        std::cerr << "Error writing to destination file." << std::endl;
+    }
+
+    // Close both files
+    sourceFile.close();
+    destFile.close();
+
+    std::cout << "File copied successfully." << std::endl;
+
+    return 0;
+}
+
+How do you read from one file and write to another file in C++?
+
+Use std::ifstream for reading from the source file and std::ofstream for writing to the destination file. Open both files using their respective objects, and use >> or std::getline to read from the input file, and << to write to the output file.
+How can you efficiently copy the contents of a file in C++?
+
+Efficient copying involves reading and writing data in chunks (buffers) rather than character by character. This minimizes the number of I/O operations and improves performance.
+What are the potential errors you should handle when copying a file?
+
+Common errors include file not found (std::ifstream or std::ofstream failed to open), permissions issues, disk full, or I/O errors during reading or writing.
+How do you check the end-of-file (EOF) condition when reading a file?
+
+Use the eof() member function of std::ifstream to check for EOF while reading from the file.
+How do you ensure both files are properly closed after the copy operation?
+
+Close both files explicitly using close() member functions of std::ifstream and std::ofstream objects, or rely on their destructors to close the files when they go out of scope.
+
+
+problem 5 :
+
+#include <iostream>
+#include <fstream>
+#include <string>
+
+int main() {
+    // Open the input file
+    std::ifstream inputFile("data.txt");
+
+    // Check if the file was successfully opened
+    if (!inputFile.is_open()) {
+        std::cerr << "Failed to open the file." << std::endl;
+        return 1;
+    }
+
+    // Initialize variables
+    std::string word;
+    int wordCount = 0;
+
+    // Read and count words from the file
+    while (inputFile >> word) {
+        wordCount++;
+    }
+
+    // Close the file
+    inputFile.close();
+
+    // Output the word count
+    std::cout << "Number of words in the file: " << wordCount << std::endl;
+
+    return 0;
+}
+Including the Necessary Headers:
+
+#include <iostream>: For console input and output.
+#include <fstream>: For file stream operations.
+#include <string>: For using the std::string class.
+Opening the File:
+
+std::ifstream inputFile("data.txt");: Creates an ifstream object and attempts to open data.txt for reading.
+Checking if the File was Successfully Opened:
+
+if (!inputFile.is_open()) { ... }: Checks if the file was successfully opened. If not, an error message is printed and the program exits.
+Counting Words in the File:
+
+while (inputFile >> word) { ... }: This loop reads words from the file using the >> operator and increments the wordCount for each word read.
+Closing the File:
+
+inputFile.close();: Closes the file after reading is done to free up resources.
+Outputting the Word Count:
+
+std::cout << "Number of words in the file: " << wordCount << std::endl;: Displays the total number of words counted from the file.
+This program efficiently counts the words in the file data.txt without loading the entire file into memory at once, making it suitable for handling large files as well. Adjustments can be made for different delimiters or specific word definitions as needed.
