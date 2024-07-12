@@ -1,0 +1,528 @@
+Example 1 :
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+struct Stu {
+    char name[20];
+    int roll;
+};
+class Student {
+public:
+    Stu s;
+
+    void put_data();
+    void get_data();
+};
+void Student::put_data() {
+    ofstream outFile("student.dat", ios::binary);
+    if (outFile.is_open()) {
+        cout << "Enter name: ";
+        cin >> s.name;
+        cout << "Enter roll number: ";
+        cin >> s.roll;
+        outFile.write(reinterpret_cast<char*>(&s), sizeof(s));
+        outFile.close();
+    } else {
+        cout << "Unable to open file for writing" << endl;
+    }
+}
+void Student::get_data() {
+    ifstream inFile("student.dat", ios::binary);
+    if (inFile.is_open()) {
+        while (inFile.read(reinterpret_cast<char*>(&s), sizeof(s))) {
+            cout << "Name: " << s.name << endl;
+            cout << "Roll number: " << s.roll << endl;
+        }
+        inFile.close();
+    } else {
+        cout << "Unable to open file for reading" << endl;
+    }
+}
+int main() {
+    Student student;
+    student.put_data();
+    student.get_data();
+    return 0;
+}
+
+Example 2 :
+
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+struct Student {
+    string name;
+    int id;
+    float marks;
+};
+void add_student() {
+    ofstream outFile("students.txt", ios::app);
+    Student s;
+    cout << "Enter name: ";
+    cin >> s.name;
+    cout << "Enter ID: ";
+    cin >> s.id;
+    cout << "Enter marks: ";
+    cin >> s.marks;
+
+    outFile << s.name << " " << s.id << " " << s.marks << endl;
+    outFile.close();
+}
+void display_students() {
+    ifstream inFile("students.txt");
+    Student s;
+
+    while (inFile >> s.name >> s.id >> s.marks) {
+        cout << "Name: " << s.name << ", ID: " << s.id << ", Marks: " << s.marks << endl;
+    }
+    inFile.close();
+}
+void search_student() {
+    ifstream inFile("students.txt");
+    Student s;
+    int search_id;
+    cout << "Enter ID to search: ";
+    cin >> search_id;
+
+    bool found = false;
+    while (inFile >> s.name >> s.id >> s.marks) {
+        if (s.id == search_id) {
+            cout << "Name: " << s.name << ", ID: " << s.id << ", Marks: " << s.marks << endl;
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        cout << "Student not found." << endl;
+    }
+    inFile.close();
+}
+int main() {
+    int choice;
+    while (true) {
+        cout << "1. Add Student\n2. Display Students\n3. Search Student\n4. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            add_student();
+            break;
+        case 2:
+            display_students();
+            break;
+        case 3:
+            search_student();
+            break;
+        case 4:
+            return 0;
+        default:
+            cout << "Invalid choice!" << endl;
+        }
+    }
+}
+
+Example 3 :
+
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+struct Contact {
+    string name;
+    string phone;
+};
+void add_contact() {
+    ofstream outFile("phonebook.txt", ios::app);
+    Contact c;
+    cout << "Enter name: ";
+    cin >> c.name;
+    cout << "Enter phone number: ";
+    cin >> c.phone;
+
+    outFile << c.name << " " << c.phone << endl;
+    outFile.close();
+}
+void search_contact() {
+    ifstream inFile("phonebook.txt");
+    Contact c;
+    string search_name;
+    cout << "Enter name to search: ";
+    cin >> search_name;
+
+    bool found = false;
+    while (inFile >> c.name >> c.phone) {
+        if (c.name == search_name) {
+            cout << "Name: " << c.name << ", Phone: " << c.phone << endl;
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        cout << "Contact not found." << endl;
+    }
+    inFile.close();
+}
+int main() {
+    int choice;
+    while (true) {
+        cout << "1. Add Contact\n2. Search Contact\n3. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            add_contact();
+            break;
+        case 2:
+            search_contact();
+            break;
+        case 3:
+            return 0;
+        default:
+            cout << "Invalid choice!" << endl;
+        }
+    }
+}
+
+Example 4 :
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+void encrypt_file(const string& filename, int key) {
+    ifstream inFile(filename);
+    ofstream outFile(filename + ".enc");
+
+    char ch;
+    while (inFile.get(ch)) {
+        outFile.put(ch + key);
+    }
+
+    inFile.close();
+    outFile.close();
+}
+void decrypt_file(const string& filename, int key) {
+    ifstream inFile(filename);
+    ofstream outFile(filename + ".dec");
+
+    char ch;
+    while (inFile.get(ch)) {
+        outFile.put(ch - key);
+    }
+
+    inFile.close();
+    outFile.close();
+}
+int main() {
+    int choice, key;
+    string filename;
+    
+    cout << "Enter filename: ";
+    cin >> filename;
+    cout << "Enter key: ";
+    cin >> key;
+
+    cout << "1. Encrypt\n2. Decrypt\n";
+    cout << "Enter choice: ";
+    cin >> choice;
+
+    switch (choice) {
+    case 1:
+        encrypt_file(filename, key);
+        break;
+    case 2:
+        decrypt_file(filename, key);
+        break;
+    default:
+        cout << "Invalid choice!" << endl;
+    }
+
+    return 0;
+}
+
+Example 5 :
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+void copy_image(const string& source, const string& destination) {
+    ifstream inFile(source, ios::binary);
+    ofstream outFile(destination, ios::binary);
+
+    if (!inFile) {
+        cout << "Source file not found!" << endl;
+        return;
+    }
+
+    outFile << inFile.rdbuf();
+    inFile.close();
+    outFile.close();
+    cout << "File copied successfully." << endl;
+}
+int main() {
+    string source, destination;
+    cout << "Enter source image file name: ";
+    cin >> source;
+    cout << "Enter destination file name: ";
+    cin >> destination;
+    copy_image(source, destination);
+    return 0;
+}
+
+Example 6 :
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+struct Item {
+    char name[30];
+    float price;
+    int quantity;
+};
+void add_item() {
+    ofstream outFile("inventory.dat", ios::binary | ios::app);
+    Item item;
+    cout << "Enter item name: ";
+    cin >> item.name;
+    cout << "Enter item price: ";
+    cin >> item.price;
+    cout << "Enter item quantity: ";
+    cin >> item.quantity;
+    outFile.write(reinterpret_cast<char*>(&item), sizeof(item));
+    outFile.close();
+}
+void display_items() {
+    ifstream inFile("inventory.dat", ios::binary);
+    Item item;
+    while (inFile.read(reinterpret_cast<char*>(&item), sizeof(item))) {
+        cout << "Name: " << item.name << ", Price: " << item.price << ", Quantity: " << item.quantity << endl;
+    }
+    inFile.close();
+}
+void update_quantity() {
+    fstream file("inventory.dat", ios::binary | ios::in | ios::out);
+    Item item;
+    char search_name[30];
+    int new_quantity;
+    cout << "Enter item name to update quantity: ";
+    cin >> search_name;
+    cout << "Enter new quantity: ";
+    cin >> new_quantity;
+    bool found = false;
+    while (file.read(reinterpret_cast<char*>(&item), sizeof(item))) {
+        if (strcmp(item.name, search_name) == 0) {
+            item.quantity = new_quantity;
+            file.seekp(-sizeof(item), ios::cur);
+            file.write(reinterpret_cast<char*>(&item), sizeof(item));
+            found = true;
+            break;
+        }
+    }
+    if (!found) {
+        cout << "Item not found." << endl;
+    }
+    file.close();
+}
+int main() {
+    int choice;
+    while (true) {
+        cout << "1. Add Item\n2. Display Items\n3. Update Quantity\n4. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) {
+        case 1:
+            add_item();
+            break;
+        case 2:
+            display_items();
+            break;
+        case 3:
+            update_quantity();
+            break;
+        case 4:
+            return 0;
+        default:
+            cout << "Invalid choice!" << endl;
+        }
+    }
+}
+
+Example 7 :
+
+#include <iostream>
+#include <fstream>
+using namespace std;
+struct HighScore {
+    char player[30];
+    int score;
+};
+void save_high_score() {
+    ofstream outFile("highscores.dat", ios::binary | ios::app);
+    HighScore hs;
+    cout << "Enter player name: ";
+    cin >> hs.player;
+    cout << "Enter score: ";
+    cin >> hs.score;
+    outFile.write(reinterpret_cast<char*>(&hs), sizeof(hs));
+    outFile.close();
+}
+void display_high_scores() {
+    ifstream inFile("highscores.dat", ios::binary);
+    HighScore hs;
+    while (inFile.read(reinterpret_cast<char*>(&hs), sizeof(hs))) {
+        cout << "Player: " << hs.player << ", Score: " << hs.score << endl;
+    }
+    inFile.close();
+}
+int main() {
+    int choice;
+    while (true) {
+        cout << "1. Save High Score\n2. Display High Scores\n3. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+        switch (choice) {
+        case 1:
+            save_high_score();
+            break;
+        case 2:
+            display_high_scores();
+            break;
+        case 3:
+            return 0;
+        default:
+            cout << "Invalid choice!" << endl;
+        }
+    }
+}
+
+Example 8 :
+
+#include <iostream>
+using namespace std;
+float division(int x, int y) {
+    if (y == 0) {
+        throw "Attempted to divide by zero!";
+    }
+    return static_cast<float>(x) / y; 
+}
+int main() {
+    int i = 25;
+    int j = 0;
+    float k = 0;
+    try {
+        k = division(i, j);
+        cout << "Division result: " << k << endl;
+    } catch (const char* e) {
+        cout << "Exception caught: " << e << endl;
+    }
+    return 0;
+}
+
+
+
+Question 1 :
+
+
+What are the advantages and disadvantages of using exceptions in C++ compared to traditional error codes?
+Advantages:
+Easy Error Handling: Exceptions make error handling easier by allowing errors to propagate automatically up the call stack until they are detected and handled. 
+Easy Error Handling: Exceptions isolate error-handling code from regular program logic, which improves the readability and maintainability of the code.
+
+Dis advantages:
+Performance Overhead: The stack unwinding process associated with exception handling can provide performance overhead, particularly in applications where performance is crucial.
+Possible Resource Leaks: If destructors or cleanup code are not designed correctly, or if exceptions are not handled appropriately, improperly managed exceptions may result in resource leaks.
+
+How can you ensure that exception classes provide informative error messages for debugging?
+To ensure that exception classes in C++ offer helpful error messages for debugging In order to return a thorough and informative error message, 
+override the what() method in your custom exception classes. This approach need to offer precise details regarding the mistake. 
+When throwing an exception, pass pertinent information (such as error codes, context, and extra data) to the exception object. 
+The error message can then contain this information.
+
+Discuss strategies for optimizing exception handling performance, especially in performance-critical applications.?
+For applications that are performance-critical and where the overhead of exceptions can impact overall efficiency, 
+it is imperative to optimize C++'s exception handling performance.
+Only Use Exceptions in Extreme Circumstances: Keep exceptions for very rare and extraordinary circumstances that cannot be managed by standard control flow. 
+Exceptions should not be used for common error management.
+
+How can you design a hierarchy of exception classes for improved code maintainability and reusability?
+
+In order to increase code maintainability and reusability, a hierarchical and ordered hierarchy of exception classes must be designed in C++.
+
+Make an instance of std::exception-derived base exception class. The base of your exception hierarchy will be this class.
+
+Create distinct exception classes to represent various error types by deriving them from the basic class.
+ This makes it easier for you to classify and manage exceptions.
+
+Creating intermediate exception classes that combine common exception categories could be helpful for larger applications. 
+
+When might it be appropriate to not use exceptions in C++ for error handling? Explain your reasoning.?
+In code paths that are crucial to performance, like real-time systems, high-frequency trading systems, or gaming loops, exceptions impose a runtime expense that can be substantial.
+Embedded devices and other systems with low resources may not be able to handle the extra stack space and processing power needed for exceptions. 
+Simple flags or error codes are less resource-intensive and more predictable.
+ In smaller utility functions or simpler programs where error handling is easy, adding exceptions could introduce needless complexity.
+
+
+Question 2 :
+
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <stdexcept>
+class FileOpenError : public std::runtime_error {
+public:
+    FileOpenError(const std::string& message) : std::runtime_error(message) {}
+};
+class InvalidDataFormatException : public std::runtime_error {
+public:
+    InvalidDataFormatException(const std::string& message) : std::runtime_error(message) {}
+};
+class CalculationError : public std::runtime_error {
+public:
+    CalculationError(const std::string& message) : std::runtime_error(message) {}
+};
+void readFileAndProcessData(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) {
+        throw FileOpenError("Failed to open file: " + filename);
+    }
+    std::string line;
+    int lineNumber = 0;
+    while (std::getline(file, line)) {
+        lineNumber++;
+        std::istringstream lineStream(line);
+        std::vector<double> values;
+        double value;
+        while (lineStream >> value) {
+            values.push_back(value);
+        }
+        if (values.size() != 2) {
+            throw InvalidDataFormatException("Invalid data format on line " + std::to_string(lineNumber));
+        }
+        try {
+            double result = values[0] * values[1];
+            std::cout << "Result of line " << lineNumber << ": " << result << std::endl;
+        } catch (const std::exception& e) {
+            throw CalculationError("Calculation error on line " + std::to_string(lineNumber) + ": " + e.what());
+        }
+    }
+}
+int main() {
+    try {
+        readFileAndProcessData("data.txt");
+    } catch (const FileOpenError& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    } catch (const InvalidDataFormatException& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    } catch (const CalculationError& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "An unexpected error occurred: " << e.what() << std::endl;
+    }
+    return 0;
+}
+
