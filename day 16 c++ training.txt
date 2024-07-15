@@ -1,0 +1,336 @@
+Example 1 :
+
+#include <iostream>
+#include <memory>
+#include <string>
+class Animal {
+public:
+    virtual ~Animal() = default;
+    virtual void makeSound() const = 0;
+    virtual std::string getType() const = 0;
+};
+class Dog : public Animal {
+public:
+    void makeSound() const override {
+        std::cout << "Woof!" << std::endl;
+    }
+    std::string getType() const override {
+        return "Dog";
+    }
+};
+class Cat : public Animal {
+public:
+    void makeSound() const override {
+        std::cout << "Meow!" << std::endl;
+    }
+    std::string getType() const override {
+        return "Cat";
+    }
+};
+std::shared_ptr<Animal> createAnimal(const std::string& type) {
+    if (type == "Dog") {
+        return std::make_shared<Dog>();
+    } else if (type == "Cat") {
+        return std::make_shared<Cat>();
+    } else {
+        throw std::invalid_argument("Unknown animal type");
+    }
+}
+int main() {
+    try {
+        std::shared_ptr<Animal> dog = createAnimal("Dog");
+        std::shared_ptr<Animal> cat = createAnimal("Cat");
+        std::weak_ptr<Animal> weakDog = dog;
+        std::weak_ptr<Animal> weakCat = cat;
+        if (auto sharedDog = weakDog.lock()) {
+            std::cout << sharedDog->getType() << " says: ";
+            sharedDog->makeSound();
+        } else {
+            std::cerr << "Dog resource is no longer available" << std::endl;
+        }
+        if (auto sharedCat = weakCat.lock()) {
+            std::cout << sharedCat->getType() << " says: ";
+            sharedCat->makeSound();
+        } else {
+            std::cerr << "Cat resource is no longer available" << std::endl;
+        }
+    } catch (const std::exception& ex) {
+        std::cerr << "Error: " << ex.what() << std::endl;
+    }
+    return 0;
+}
+
+
+
+Example 2 :
+
+#include <iostream>
+#include <random>
+#include <string>
+int rollDice(int sides) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(1, sides);
+    return dis(gen);
+}
+std::string flipCoin() {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dis(0, 1);
+    return dis(gen) == 0 ? "Heads" : "Tails";
+}
+double generateTemperature(double minTemp, double maxTemp) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(minTemp, maxTemp);
+    return dis(gen);
+}
+int main() {
+    int choice;
+    std::cout << "Choose the type of simulation:\n";
+    std::cout << "1. Roll a Dice\n";
+    std::cout << "2. Flip a Coin\n";
+    std::cout << "3. Generate Random Temperature\n";
+    std::cout << "Enter your choice: ";
+    std::cin >> choice;
+    switch (choice) {
+    case 1: {
+        int sides;
+        std::cout << "Enter the number of sides on the dice: ";
+        std::cin >> sides;
+        if (sides <= 0) {
+            std::cerr << "Invalid number of sides. Must be greater than 0.\n";
+            return 1;
+        }
+        int result = rollDice(sides);
+        std::cout << "You rolled a " << result << "!\n";
+        break;
+    }
+    case 2: {
+        std::string result = flipCoin();
+        std::cout << "You flipped a " << result << "!\n";
+        break;
+    }
+    case 3: {
+        double minTemp, maxTemp;
+        std::cout << "Enter the minimum temperature: ";
+        std::cin >> minTemp;
+        std::cout << "Enter the maximum temperature: ";
+        std::cin >> maxTemp;
+        if (minTemp >= maxTemp) {
+            std::cerr << "Invalid temperature range. Minimum temperature must be less than maximum temperature.\n";
+            return 1;
+        }
+        double result = generateTemperature(minTemp, maxTemp);
+        std::cout << "Random temperature: " << result << "°\n";
+        break;
+    }
+    default:
+        std::cerr << "Invalid choice. Please select 1, 2, or 3.\n";
+        return 1;
+    }
+    return 0;
+}
+
+
+Example 3 :
+
+#include <iostream>
+#include <fstream>
+#include <regex>
+#include <string>
+#include <stdexcept>
+class FileException : public std::runtime_error {
+public:
+    explicit FileException(const std::string& message)
+        : std::runtime_error(message) {}
+};
+void processLogFile(const std::string& inputFilePath, const std::string& outputFilePath, const std::regex& pattern) {
+    std::ifstream inputFile(inputFilePath);
+    if (!inputFile.is_open()) {
+        throw FileException("Error opening input file: " + inputFilePath);
+    }
+    std::ofstream outputFile(outputFilePath);
+    if (!outputFile.is_open()) {
+        throw FileException("Error opening output file: " + outputFilePath);
+    }
+    std::string line;
+    while (std::getline(inputFile, line)) {
+        if (std::regex_search(line, pattern)) {
+            outputFile << line << std::endl;
+        }
+    }
+    if (inputFile.bad()) {
+        throw FileException("Error reading from input file: " + inputFilePath);
+    }
+    if (outputFile.bad()) {
+        throw FileException("Error writing to output file: " + outputFilePath);
+    }
+}
+int main() {
+    std::string inputFilePath = "log.txt";
+    std::string outputFilePath = "error_log.txt";
+    std::regex errorPattern(R"(ERROR:\s+.*)");
+    try {
+        processLogFile(inputFilePath, outputFilePath, errorPattern);
+        std::cout << "Log file processed successfully. Check " << outputFilePath << " for results." << std::endl;
+    } catch (const FileException& e) {
+        std::cerr << "File error: " << e.what() << std::endl;
+    } catch (const std::regex_error& e) {
+        std::cerr << "Regex error: " << e.what() << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Unexpected error: " << e.what() << std::endl;
+    }
+    return 0;
+}
+
+
+Example 4 :
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <functional>
+class LargeData {
+public:
+    LargeData(size_t size) : data(size) {
+        std::cout << "LargeData created with size " << size << std::endl;
+    }
+    LargeData(LargeData&& other) noexcept : data(std::move(other.data)) {
+        std::cout << "LargeData moved" << std::endl;
+    }
+    LargeData& operator=(LargeData&& other) noexcept {
+        if (this != &other) {
+            data = std::move(other.data);
+            std::cout << "LargeData move assigned" << std::endl;
+        }
+        return *this;
+    }
+    LargeData(const LargeData&) = delete;
+    LargeData& operator=(const LargeData&) = delete;
+    void processData(const std::function<void(std::vector<int>&)>& func) {
+        func(data);
+    }
+    void printData() const {
+        for (const auto& val : data) {
+            std::cout << val << " ";
+        }
+        std::cout << std::endl;
+    }
+private:
+    std::vector<int> data;
+};
+class DataContainer {
+public:
+    void addData(LargeData&& data) {
+        container.push_back(std::move(data));
+    }
+    void processDataInContainer(const std::function<void(std::vector<int>&)>& func) {
+        for (auto& data : container) {
+            data.processData(func);
+        }
+    }
+    void printContainer() const {
+        for (const auto& data : container) {
+            data.printData();
+        }
+    }
+private:
+    std::vector<LargeData> container;
+};
+int main() {
+    DataContainer dataContainer;
+    dataContainer.addData(LargeData(10));
+    dataContainer.addData(LargeData(20));
+    dataContainer.addData(LargeData(30));
+    dataContainer.processDataInContainer([](std::vector<int>& data) {
+        std::generate(data.begin(), data.end(), [n = 0]() mutable { return n++; });
+    });
+    dataContainer.printContainer();
+    return 0;
+}
+
+
+Example : 
+
+#include <iostream>
+#include <map>
+#include <string>
+#include <limits>
+struct Contact {
+    std::string phoneNumber;
+    std::string email;
+};
+void addContact(std::map<std::string, Contact>& contacts) {
+    std::string name, phoneNumber, email;
+    std::cout << "Enter contact name: ";
+    std::cin.ignore();
+    std::getline(std::cin, name);
+    std::cout << "Enter phone number: ";
+    std::getline(std::cin, phoneNumber);
+    std::cout << "Enter email: ";
+    std::getline(std::cin, email);
+    contacts[name] = {phoneNumber, email};
+    std::cout << "Contact added successfully!\n";
+}
+void searchContact(const std::map<std::string, Contact>& contacts) {
+    std::string name;
+
+    std::cout << "Enter contact name to search: ";
+    std::cin.ignore();
+    std::getline(std::cin, name);
+    auto it = contacts.find(name);
+    if (it != contacts.end()) {
+        std::cout << "Name: " << it->first << "\n"
+                  << "Phone Number: " << it->second.phoneNumber << "\n"
+                  << "Email: " << it->second.email << "\n";
+    } else {
+        std::cout << "Contact not found.\n";
+    }
+}
+void displayContacts(const std::map<std::string, Contact>& contacts) {
+    if (contacts.empty()) {
+        std::cout << "No contacts available.\n";
+    } else {
+        for (const auto& pair : contacts) {
+            std::cout << "Name: " << pair.first << "\n"
+                      << "Phone Number: " << pair.second.phoneNumber << "\n"
+                      << "Email: " << pair.second.email << "\n"
+                      << "--------------------------\n";
+        }
+    }
+}
+int main() {
+    std::map<std::string, Contact> contacts;
+    int choice;
+    while (true) {
+        std::cout << "Contact Manager\n";
+        std::cout << "1. Add Contact\n";
+        std::cout << "2. Search Contact\n";
+        std::cout << "3. Display All Contacts\n";
+        std::cout << "4. Exit\n";
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
+        switch (choice) {
+            case 1:
+                addContact(contacts);
+                break;
+            case 2:
+                searchContact(contacts);
+                break;
+            case 3:
+                displayContacts(contacts);
+                break;
+            case 4:
+                std::cout << "Exiting...\n";
+                return 0;
+            default:
+                std::cout << "Invalid choice. Please try again.\n";
+                break;
+        }
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    }
+}
+
+
