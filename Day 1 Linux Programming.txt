@@ -1,0 +1,216 @@
+
+1. dir (Windows) / ls (Linux/macOS): Lists the contents of a directory.
+Where appropriate, let's convert the prior Linux/macOS instructions to Windows dir commands to give the integrated capability.
+To see a list of the files and subdirectories in a directory on the Command Prompt, use the dir command. 
+To see the files and folders in the current directory, run the ls command on the terminal. 
+-a: Enumerates all files, even those that are hidden and begin with.
+-l: Displays a long format file list with information on the file's rights, number of links, owner, group, size, and last modification time.
+
+2.  cd (all): Changes the current directory.
+To modify the current working directory, type the cd (change directory) command in the Command Prompt (Windows) or Terminal (Linux/macOS).
+
+
+3.  mkdir (all): Creates a new directory.
+
+To create a new directory (folder) at a given path or inside the current directory, use the mkdir command.
+ There aren't many options for the mkdir command. If the directory doesn't already exist, it merely creates it.
+ By putting spaces between directory names in Windows, It can easily create many directories at once.
+
+
+4. rm (Linux/macOS) / del (Windows): Deletes a file or directory (use with caution!).
+
+Take care while using del or rm: These commands erase directories and files permanently. Usually, once erased, they are difficult to restore (particularly without backup). To prevent inadvertently losing crucial data, 
+always practice file deletion with non-critical files in a secure location.
+
+5. copy (Windows) / cp (Linux/macOS): Copies a file.
+cd ~  
+echo "This is a test file." > test.txt  
+ls -l test.txt  
+dir test.txt  
+ls -l test2.txt  
+These instructions move a file from one place to another. Moving, as opposed to copying, involves taking the file out of its original location once it has been successfully moved to the new location. 
+When copying or transferring files, make careful to supply the correct paths to prevent accidental overwriting or data loss.
+
+6. move (Windows) / mv (Linux/macOS): Moves a file from one location to another
+The move command is used in Command Prompt to move a file from one location to another on the same drive or across drives.
+mv test.txt /home/username/Documents
+mv test.txt /home/username/Documents/new_name.txt
+Both move (Windows) and mv (Linux/macOS) relocate a file from its current location to a specified destination.
+
+7.  rename (Windows) / mv (Linux/macOS): Renames a file.
+The rename command is used in Command Prompt to rename a file or group of files.
+rename old_name.txt new_name.txt
+ Both rename (Windows) and mv (Linux/macOS) can be used to change the name of a file.
+
+8. ping (all): Checks if another computer is reachable on a network.
+The ping command is used in Command Prompt (Windows) or Terminal (Linux/macOS)
+ to test the reachability of a host on a network using the Internet Control Message Protocol (ICMP).
+ping www.example.com
+ping is useful for diagnosing network issues, checking the availability of remote servers, and measuring network latency.
+
+9. help (all): Provides help information for other commands.
+The help command is used in Command Prompt (Windows) or Terminal (Linux/macOS) to display information and usage instructions for other commands.
+help mv
+Use help followed by the command name to retrieve detailed documentation directly from the terminal.
+
+10. pconfig (Windows) / ifconfig (Linux/macOS): Shows network configuration information.
+The ipconfig command is used in Command Prompt on Windows to display network configuration information including IP address, subnet mask, and default gateway.
+ipconfig
+ipconfig and ifconfig are essential tools for diagnosing connectivity problems by providing network configuration details.
+
+11.  clear (all): Clears the screen (text) in the terminal window.
+The clear command is used in the terminal (Command Prompt on Windows, Terminal on Linux/macOS) to clear the screen of all previous commands and output.
+clear is useful for improving readability and focusing on new tasks without distractions from previous terminal activity.
+
+12. date (all): Shows the current date and time:
+The date command is used in the terminal (Command Prompt on Windows, Terminal on Linux/macOS) to display the current system date and time.
+Syntax: date
+Open Command Prompt (cmd.exe).
+Type date and press Enter.
+The current date and time will be shown based on the system settings.
+
+13. time (all): (continued) You want to see how long a command takes to execute.
+
+Exercise: Try time ls (all) to see how long it takes to list the directory contents.
+
+The time command is used in the terminal (Command Prompt on Windows, Terminal on Linux/macOS) to measure the execution time of a command.
+Syntax: time [command]
+Open Command Prompt (cmd.exe).
+Type time followed by a command, such as time dir, to measure the execution time of the dir command.
+time provides real time (elapsed time), user CPU time (time spent executing in user-mode code), and system CPU time (time spent executing in kernel-mode code).
+
+14.mkdir -p (Linux/macOS): Creates a directory and any missing parent directories.
+
+Use Case: You want to create a new folder within a nested structure that might not exist yet.
+Exercise: Use mkdir -p Documents/Subfolder1/Subfolder2 (Linux/macOS) to create "Subfolder2" within "Subfolder1" inside the "Documents" folder (assuming "Documents" exists).
+mkdir -p (Linux/macOS):
+The mkdir -p command is used in the terminal to create a directory and any missing parent directories in the specified path.
+mkdir -p ensures that all directories in the specified path are created, even if intermediate directories (parent directories) do not exist.
+
+
+15.  cat (Linux/macOS): Displays the contents of a text file.
+
+Use Case: You want to read the contents of a text file without opening it in a separate program.
+Exercise: Create a text file with some content and use cat filename.txt (Linux/macOS) to see its contents.
+To create a text file with some content and then view its contents using cat on Linux/windows
+This is a text file.
+It contains some example content.
+Hello from the text file!
+
+16. echo (all):
+The echo command is used in the terminal (Command Prompt on Windows, Terminal on Linux/macOS) to print text or variables to the terminal window.
+Syntax: echo [text]
+echo Hello, world!
+Use sudo cautiously as it grants powerful administrative rights, capable of modifying system files and configurations.
+
+17. sudo (Linux/macOS): Grants temporary superuser privileges to execute a command (use with caution!).
+
+Use Case: You need to perform an action that requires administrative rights.
+Exercise: Important: Never use sudo for untrusted commands! In a safe scenario (like creating a test file), 
+use sudo touch important.txt to create a file that might require admin access (assuming you have the password).
+
+sudo touch important.txt
+sudo is commonly used for system administration tasks like installing software, modifying system files, or managing services.
+The sudo command is used in the terminal on Linux/macOS to execute a command with superuser (administrative) privileges temporarily.
+
+
+18. shutdown (Linux/macOS) / shutdown /s /t (Windows): Initiates a system shutdown or restart.
+
+Use Case: You want to turn off or restart your computer.
+Exercise: Important: Don't accidentally shut down your computer! This is for learning purposes only. 
+Look up the specific options for your system to safely test a shutdown with a delay (e.g., shutdown /s /t 60 for Windows to shutdown in 60 seconds).
+sudo shutdown -h now
+The shutdown command is used in the terminal on Linux/macOS to shut down or restart the system.
+On Windows, the shutdown command is used in Command Prompt to shut down or restart the system, with options to delay shutdown.
+
+19. The history command is used in the terminal (Command Prompt on Windows, Terminal on Linux/macOS) to display a list of previously entered commands from the command history.
+Syntax: history
+history
+Commands from history can be reused by typing their sequence number preceded by an exclamation mark (!) or using other shell features like reverse search (Ctrl + R in bash).
+
+Example 1:
+Write a command using ls to list all files (including hidden files) in the current directory and its subdirectories.
+Modify the previous command to display only files with a specific extension (e.g., .txt).
+Enhance the report by including the file size for each listed file.
+Further refine the output to display only files modified within the last 24 hours.
+Combine the functionalities from points 2 and 4 to list only files with a specific extension (e.g., .jpg) modified in the last day.
+ls -R -a
+find . -type f -name "*.txt" -exec ls -l {} +
+find . -type f -name "*.txt" -exec ls -lh {} +
+find . -type f -name "*.txt" -mtime -1 -exec ls -l {} +ls -lhS
+ls *.docx
+
+find . -type f -name "*.jpg" -mtime -1 -exec ls -l {} +
+
+
+Example 2:
+dir / ls (5):
+
+Use dir / ls to list all files and folders in your current directory. How many files are there? (Excluding hidden files if applicable)
+Utilize dir / ls with appropriate flags to display only files with a specific extension (e.g., .txt). How many files of that type exist?
+Navigate to your Downloads folder using cd. Then, use dir / ls to list the contents. Are there any recently downloaded files (modified today)?
+Use dir / ls with flags to display both the filename and its size for each file in your current directory. Identify the largest file.
+Practice using dir / ls with wildcards (e.g., dir *.docx) to list all files with a specific extension pattern (e.g., all Word documents).
+
+Windows (dir command):
+dir /A:-D /B | find /c /v ""
+ls -l | grep "^-" | wc -l
+ls -l *.txt | grep "^-" | wc -l
+Replace *.txt, *.docx, or Downloads with your specific file extension or directory as needed.
+Ensure to run these commands in the correct directory to get accurate results.
+Windows and Linux/macOS commands have slight variations in options and behavior, especially regarding date formatting (/T:C vs --time=ctime).
+
+Example 3:
+cd Documents
+echo %cd%
+cd Documents
+pwd
+cd Documents
+echo %cd%
+cd Documents
+pwd
+cd ~  # Navigate to the home directory
+cd ~/Downloads  # Navigate to Downloads within the home directory
+cd /path/to/specific/folder  # Navigate to a specific folder using full path
+cd Documents
+dir
+cd Documents
+ls
+
+Example 4:
+cp / mv (5):
+
+Identify a file on your Desktop. Use cp to copy that file to your Documents folder. Verify the copy exists in Documents.
+Practice renaming a file on your Desktop using mv. Give it a new name and confirm the change using dir / ls.
+Locate a folder containing images. Use cp to copy a specific image file from that folder to another folder.
+Explore using mv to move a folder containing documents to a different location within your file system.
+Try copying a file that already exists in the destination folder. What happens? (Experiment with different flags for cp if applicable on your system)
+cd Desktop
+cp filename.txt C:\Users\YourUsername\Documents
+cd Desktop
+cp filename.txt ~/Documents
+cd Desktop
+mv oldname.txt newname.txt
+dir
+cd Desktop
+mv oldname.txt newname.txt
+ls
+cp filename.txt C:\Users\YourUsername\Documents
+cp -i filename.txt ~/Documents
+
+Example 4:
+mkdir "C:\Users\YourUsername\Documents\Project Reports"
+dir "C:\Users\YourUsername\Documents"
+mkdir ~/Documents/Project\ Reports
+ls ~/Documents
+mkdir "C:\Users\YourUsername\Documents\ProjectX\Reports"
+mkdir -p ~/Documents/ProjectX/Reports
+rmdir "C:\Users\YourUsername\Documents\EmptyFolder"
+dir "C:\Users\YourUsername\Documents"
+rmdir ~/Documents/EmptyFolder
+ls ~/Documents
+dir /AD /B /S "C:\Users\YourUsername\Documents" | findstr /R /C:"^[^ ]"
+find ~/Documents -type d -empty
+
+
+
